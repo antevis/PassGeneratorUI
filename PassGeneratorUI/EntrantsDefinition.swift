@@ -10,7 +10,7 @@ import Foundation
 
 //MARK: Global Scope Dictionaries
 
-//Probably not the best approach to declare dictionaries like this
+//Probably not the best approach to declare dictionaries as high as this level
 let AreaAccessByProject: [Project: [Area]] = [
 	
 	Project.oneOne: [Area.amusement, Area.rideControl],
@@ -62,9 +62,13 @@ enum Area {
 		
 		return (accessGranted, message)
 	}
+}
+
+extension Area {
 	
 	static func fullAccess() -> [Area] {
 		
+		//Missing enum enumeration in almost every project so far.:(
 		return [Area.amusement, Area.kitchen, Area.maintenance, Area.maintenance, Area.office, Area.rideControl]
 	}
 }

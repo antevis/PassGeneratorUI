@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 typealias Aux = Auxilliary
 
@@ -97,6 +98,17 @@ class Auxilliary {
 		for discount in discounts {
 			
 			print(discount.description())
+		}
+	}
+	
+	class func  removeButtonsFrom(superView: UIView) {
+		
+		for subView in superView.subviews {
+			
+			if subView is UIButton {
+				
+				subView.removeFromSuperview()
+			}
 		}
 	}
 }

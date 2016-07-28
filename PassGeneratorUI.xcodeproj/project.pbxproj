@@ -12,6 +12,13 @@
 		2CF481C01D49CB4800E87533 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2CF481BE1D49CB4800E87533 /* Main.storyboard */; };
 		2CF481C21D49CB4800E87533 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CF481C11D49CB4800E87533 /* Assets.xcassets */; };
 		2CF481C51D49CB4800E87533 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2CF481C31D49CB4800E87533 /* LaunchScreen.storyboard */; };
+		2CF481D11D49CB9D00E87533 /* AudioServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF481CC1D49CB9D00E87533 /* AudioServices.swift */; };
+		2CF481D21D49CB9D00E87533 /* Auxilliary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF481CD1D49CB9D00E87533 /* Auxilliary.swift */; };
+		2CF481D31D49CB9D00E87533 /* Entrants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF481CE1D49CB9D00E87533 /* Entrants.swift */; };
+		2CF481D41D49CB9D00E87533 /* EntrantsDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF481CF1D49CB9D00E87533 /* EntrantsDefinition.swift */; };
+		2CF481D51D49CB9D00E87533 /* RideAccessController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF481D01D49CB9D00E87533 /* RideAccessController.swift */; };
+		2CF481D81D49CBB600E87533 /* AccessDenied.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2CF481D61D49CBB600E87533 /* AccessDenied.wav */; };
+		2CF481D91D49CBB600E87533 /* AccessGranted.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2CF481D71D49CBB600E87533 /* AccessGranted.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +29,13 @@
 		2CF481C11D49CB4800E87533 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2CF481C41D49CB4800E87533 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2CF481C61D49CB4800E87533 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2CF481CC1D49CB9D00E87533 /* AudioServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioServices.swift; sourceTree = "<group>"; };
+		2CF481CD1D49CB9D00E87533 /* Auxilliary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Auxilliary.swift; sourceTree = "<group>"; };
+		2CF481CE1D49CB9D00E87533 /* Entrants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Entrants.swift; sourceTree = "<group>"; };
+		2CF481CF1D49CB9D00E87533 /* EntrantsDefinition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntrantsDefinition.swift; sourceTree = "<group>"; };
+		2CF481D01D49CB9D00E87533 /* RideAccessController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RideAccessController.swift; sourceTree = "<group>"; };
+		2CF481D61D49CBB600E87533 /* AccessDenied.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = AccessDenied.wav; sourceTree = "<group>"; };
+		2CF481D71D49CBB600E87533 /* AccessGranted.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = AccessGranted.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +68,13 @@
 		2CF481B91D49CB4800E87533 /* PassGeneratorUI */ = {
 			isa = PBXGroup;
 			children = (
+				2CF481D61D49CBB600E87533 /* AccessDenied.wav */,
+				2CF481D71D49CBB600E87533 /* AccessGranted.wav */,
+				2CF481CC1D49CB9D00E87533 /* AudioServices.swift */,
+				2CF481CD1D49CB9D00E87533 /* Auxilliary.swift */,
+				2CF481CE1D49CB9D00E87533 /* Entrants.swift */,
+				2CF481CF1D49CB9D00E87533 /* EntrantsDefinition.swift */,
+				2CF481D01D49CB9D00E87533 /* RideAccessController.swift */,
 				2CF481BA1D49CB4800E87533 /* AppDelegate.swift */,
 				2CF481BC1D49CB4800E87533 /* ViewController.swift */,
 				2CF481BE1D49CB4800E87533 /* Main.storyboard */,
@@ -123,8 +144,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				2CF481C51D49CB4800E87533 /* LaunchScreen.storyboard in Resources */,
+				2CF481D91D49CBB600E87533 /* AccessGranted.wav in Resources */,
 				2CF481C21D49CB4800E87533 /* Assets.xcassets in Resources */,
 				2CF481C01D49CB4800E87533 /* Main.storyboard in Resources */,
+				2CF481D81D49CBB600E87533 /* AccessDenied.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,7 +159,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				2CF481BD1D49CB4800E87533 /* ViewController.swift in Sources */,
+				2CF481D41D49CB9D00E87533 /* EntrantsDefinition.swift in Sources */,
+				2CF481D51D49CB9D00E87533 /* RideAccessController.swift in Sources */,
 				2CF481BB1D49CB4800E87533 /* AppDelegate.swift in Sources */,
+				2CF481D11D49CB9D00E87533 /* AudioServices.swift in Sources */,
+				2CF481D21D49CB9D00E87533 /* Auxilliary.swift in Sources */,
+				2CF481D31D49CB9D00E87533 /* Entrants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

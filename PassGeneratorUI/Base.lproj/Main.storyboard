@@ -36,50 +36,15 @@
                                     <constraint firstAttribute="height" constant="60" id="j66-D0-htm"/>
                                 </constraints>
                             </stackView>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="H8R-qw-puo">
-                                <rect key="frame" x="0.0" y="150" width="768" height="110"/>
-                                <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Hg1-jW-8ru">
-                                        <rect key="frame" x="0.0" y="0.0" width="256" height="110"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" misplaced="YES" text="Date of Birth" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0qc-f0-H1a">
-                                                <rect key="frame" x="8" y="8" width="240" height="21"/>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="akb-o6-wxW">
-                                                <rect key="frame" x="8" y="37" width="240" height="66"/>
-                                                <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
-                                            </textField>
-                                        </subviews>
-                                        <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
-                                    </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Bhs-3N-gsk">
-                                        <rect key="frame" x="256" y="0.0" width="256" height="110"/>
-                                    </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="UK3-mZ-BHc">
-                                        <rect key="frame" x="512" y="0.0" width="256" height="110"/>
-                                    </stackView>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="110" id="Auj-9I-fgm"/>
-                                </constraints>
-                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="H8R-qw-puo" secondAttribute="trailing" id="2zo-Yq-u1V"/>
-                            <constraint firstItem="H8R-qw-puo" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="4Wt-Ot-CW3"/>
                             <constraint firstItem="gc7-zh-7wj" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="5RZ-Ge-YSC"/>
                             <constraint firstAttribute="trailing" secondItem="zf8-dp-vIv" secondAttribute="trailing" id="6W4-hS-d82"/>
                             <constraint firstItem="zf8-dp-vIv" firstAttribute="top" secondItem="gc7-zh-7wj" secondAttribute="bottom" id="RXI-tn-xqJ"/>
                             <constraint firstItem="gc7-zh-7wj" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" constant="20" id="fJE-oL-5q6"/>
                             <constraint firstAttribute="trailingMargin" secondItem="gc7-zh-7wj" secondAttribute="trailing" constant="-20" id="gHa-Ts-lY7"/>
                             <constraint firstItem="zf8-dp-vIv" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="nWu-wH-AgI"/>
-                            <constraint firstItem="H8R-qw-puo" firstAttribute="top" secondItem="zf8-dp-vIv" secondAttribute="bottom" id="oGh-bU-6nB"/>
                         </constraints>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>

@@ -10,6 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
 
+	
 	@IBOutlet weak var headerStackView: UIStackView!
 	@IBOutlet weak var subCatStackView: UIStackView!
 	
@@ -23,7 +24,7 @@ class ViewController: UIViewController {
 		
 		for item in entrantStructure {
 			
-			let button = composeButton(item.category.rawValue, tag: tag, bgColor: UIColor.blueColor(), titleColor: UIColor.grayColor(), action: .parentTapped)
+			let button = composeButton(buttonText: item.category.rawValue, tag: tag, bgColor: UIColor.blueColor(), titleColor: UIColor.grayColor(), action: .parentTapped)
 			
 			headerStackView.addArrangedSubview(button)
 			
@@ -38,11 +39,6 @@ class ViewController: UIViewController {
 			
 			button.sendActionsForControlEvents(.TouchUpInside)
 		}
-		
-	}
-	
-	func swws(action: Selector){
-		
 	}
 	
 	
@@ -89,12 +85,12 @@ class ViewController: UIViewController {
 	
 	func addButtonTo(stack stackView: UIStackView, text: String, tag: Int, bgColor: UIColor, titleColor: UIColor, action: Selector) {
 		
-		let button = composeButton(text, tag: tag, bgColor: bgColor, titleColor: titleColor, action: action)
+		let button = composeButton(buttonText: text, tag: tag, bgColor: bgColor, titleColor: titleColor, action: action)
 		
 		stackView.addArrangedSubview(button)
 	}
 	
-	func composeButton(text: String, tag: Int, bgColor: UIColor, titleColor: UIColor, action: Selector) -> UIButton {
+	func composeButton(buttonText text: String, tag: Int, bgColor: UIColor, titleColor: UIColor, action: Selector) -> UIButton {
 		
 		let button = UIButton()
 		button.backgroundColor = bgColor

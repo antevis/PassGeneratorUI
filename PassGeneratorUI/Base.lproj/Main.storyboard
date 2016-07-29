@@ -14,13 +14,47 @@
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="gc7-zh-7wj">
+                                <rect key="frame" x="0.0" y="20" width="768" height="70"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="70" id="4s0-sk-5Xc"/>
+                                    <constraint firstAttribute="width" constant="600" id="6Ug-xH-3p7"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="6Ug-xH-3p7"/>
+                                    </mask>
+                                </variation>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="zf8-dp-vIv">
+                                <rect key="frame" x="0.0" y="90" width="768" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="j66-D0-htm"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="gc7-zh-7wj" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="5RZ-Ge-YSC"/>
+                            <constraint firstAttribute="trailing" secondItem="zf8-dp-vIv" secondAttribute="trailing" id="6W4-hS-d82"/>
+                            <constraint firstItem="zf8-dp-vIv" firstAttribute="top" secondItem="gc7-zh-7wj" secondAttribute="bottom" id="RXI-tn-xqJ"/>
+                            <constraint firstItem="gc7-zh-7wj" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" constant="20" id="fJE-oL-5q6"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="gc7-zh-7wj" secondAttribute="trailing" constant="-20" id="gHa-Ts-lY7"/>
+                            <constraint firstItem="zf8-dp-vIv" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="nWu-wH-AgI"/>
+                        </constraints>
                     </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
+                    <connections>
+                        <outlet property="headerStackView" destination="gc7-zh-7wj" id="IWO-2h-Zq4"/>
+                        <outlet property="subCatStackView" destination="zf8-dp-vIv" id="aIy-3d-oCm"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="427" y="464"/>
         </scene>
     </scenes>
 </document>

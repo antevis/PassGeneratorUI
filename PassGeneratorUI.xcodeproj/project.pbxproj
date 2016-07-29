@@ -19,6 +19,7 @@
 		2CF481D51D49CB9D00E87533 /* RideAccessController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF481D01D49CB9D00E87533 /* RideAccessController.swift */; };
 		2CF481D81D49CBB600E87533 /* AccessDenied.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2CF481D61D49CBB600E87533 /* AccessDenied.wav */; };
 		2CF481D91D49CBB600E87533 /* AccessGranted.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2CF481D71D49CBB600E87533 /* AccessGranted.wav */; };
+		2CF481DB1D49E61600E87533 /* EntrantDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF481DA1D49E61600E87533 /* EntrantDataModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		2CF481D01D49CB9D00E87533 /* RideAccessController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RideAccessController.swift; sourceTree = "<group>"; };
 		2CF481D61D49CBB600E87533 /* AccessDenied.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = AccessDenied.wav; sourceTree = "<group>"; };
 		2CF481D71D49CBB600E87533 /* AccessGranted.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = AccessGranted.wav; sourceTree = "<group>"; };
+		2CF481DA1D49E61600E87533 /* EntrantDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntrantDataModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +83,7 @@
 				2CF481C11D49CB4800E87533 /* Assets.xcassets */,
 				2CF481C31D49CB4800E87533 /* LaunchScreen.storyboard */,
 				2CF481C61D49CB4800E87533 /* Info.plist */,
+				2CF481DA1D49E61600E87533 /* EntrantDataModel.swift */,
 			);
 			path = PassGeneratorUI;
 			sourceTree = "<group>";
@@ -158,6 +161,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2CF481DB1D49E61600E87533 /* EntrantDataModel.swift in Sources */,
 				2CF481BD1D49CB4800E87533 /* ViewController.swift in Sources */,
 				2CF481D41D49CB9D00E87533 /* EntrantsDefinition.swift in Sources */,
 				2CF481D51D49CB9D00E87533 /* RideAccessController.swift in Sources */,

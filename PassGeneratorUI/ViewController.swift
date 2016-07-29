@@ -23,15 +23,7 @@ class ViewController: UIViewController {
 		
 		for item in entrantStructure {
 			
-			let button = UIButton()
-			button.backgroundColor = UIColor.blueColor()
-			button.setTitle(item.category.rawValue, forState: .Normal)
-			button.setTitleColor(UIColor.grayColor(), forState: .Normal)
-			button.titleLabel?.textAlignment = .Center
-			button.titleLabel?.lineBreakMode = .ByWordWrapping
-			button.addTarget(self, action: #selector(fillChildStack), forControlEvents: .TouchUpInside)
-			
-			button.tag = tag
+			let button = composeButton(item.category.rawValue, tag: tag, bgColor: UIColor.blueColor(), titleColor: UIColor.grayColor(), action: .parentTapped)
 			
 			headerStackView.addArrangedSubview(button)
 			
@@ -45,11 +37,14 @@ class ViewController: UIViewController {
 			let button = headerButtons[0]
 			
 			button.sendActionsForControlEvents(.TouchUpInside)
-		
-			//fillChildStack(button)
 		}
 		
 	}
+	
+	func swws(action: Selector){
+		
+	}
+	
 	
 	func fillChildStack(sender: UIButton!){
 		
@@ -68,17 +63,7 @@ class ViewController: UIViewController {
 		
 		for item in entrantStructureItem.subCat {
 			
-			let button = UIButton()
-			button.backgroundColor = UIColor.magentaColor()
-			button.setTitle(item.rawValue, forState: .Normal)
-			button.setTitleColor(UIColor.grayColor(), forState: .Normal)
-			button.titleLabel?.textAlignment = .Center
-			button.titleLabel?.lineBreakMode = .ByWordWrapping
-			button.addTarget(self, action: #selector(onSubCatSelected), forControlEvents: .TouchUpInside)
-			
-			button.tag = tag
-			
-			subCatStackView.addArrangedSubview(button)
+			addButtonTo(stack: subCatStackView, text: item.rawValue, tag: tag, bgColor: UIColor.magentaColor(), titleColor: UIColor.grayColor(), action: Selector.childTapped)
 			
 			tag += 1
 		}
@@ -101,7 +86,42 @@ class ViewController: UIViewController {
 		super.didReceiveMemoryWarning()
 		// Dispose of any resources that can be recreated.
 	}
-
-
+	
+	func addButtonTo(stack stackView: UIStackView, text: String, tag: Int, bgColor: UIColor, titleColor: UIColor, action: Selector) {
+		
+		let button = composeButton(text, tag: tag, bgColor: bgColor, titleColor: titleColor, action: action)
+		
+		stackView.addArrangedSubview(button)
+	}
+	
+	func composeButton(text: String, tag: Int, bgColor: UIColor, titleColor: UIColor, action: Selector) -> UIButton {
+		
+		let button = UIButton()
+		button.backgroundColor = bgColor
+		button.setTitle(text, forState: .Normal)
+		button.setTitleColor(titleColor, forState: .Normal)
+		button.titleLabel?.textAlignment = .Center
+		button.titleLabel?.lineBreakMode = .ByWordWrapping
+		button.addTarget(self, action: action, forControlEvents: .TouchUpInside)
+		
+		button.tag = tag
+		
+		return button
+	}
 }
+
+//https://medium.com/swift-programming/swift-selector-syntax-sugar-81c8a8b10df3#.ywjyftjut
+private extension Selector {
+	
+	static let parentTapped = #selector(ViewController.fillChildStack(_:))
+	
+	static let childTapped = #selector(ViewController.onSubCatSelected(_:))
+	
+}
+
+
+
+
+
+
 

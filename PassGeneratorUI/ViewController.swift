@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITextFieldDelegate {
 
 	
 	@IBOutlet weak var headerStackView: UIStackView!
@@ -104,6 +104,11 @@ class ViewController: UIViewController {
 		
 		return button
 	}
+	
+//	func textFieldShouldEndEditing(textField: UITextField) -> Bool {
+//		
+//		
+//	}
 }
 
 //https://medium.com/swift-programming/swift-selector-syntax-sugar-81c8a8b10df3#.ywjyftjut
@@ -114,6 +119,8 @@ private extension Selector {
 	static let childTapped = #selector(ViewController.onSubCatSelected(_:))
 	
 }
+
+
 
 
 

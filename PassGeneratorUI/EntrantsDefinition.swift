@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 //MARK: Global Scope Dictionaries
 
@@ -68,7 +69,7 @@ extension Area {
 	
 	static func fullAccess() -> [Area] {
 		
-		//Missing enum enumeration in almost every project so far.:(
+		//Missing enum iteration in almost every project so far.:(
 		return [Area.amusement, Area.kitchen, Area.maintenance, Area.maintenance, Area.office, Area.rideControl]
 	}
 }
@@ -112,6 +113,23 @@ enum Project: String {
 	case oneThree = "1003"
 	case twoOne = "2001"
 	case twoTwo = "2002"
+	
+	static func allProjects() -> [Project] {
+		
+		return [oneOne, oneTwo, oneThree, twoOne, twoTwo]
+	}
+	
+	static func allProjectNumbers() -> [String] {
+		
+		var projectNumbers: [String] = []
+		
+		for project in allProjects() {
+			
+			projectNumbers.append(project.rawValue)
+		}
+		
+		return projectNumbers
+	}
 }
 
 enum VendorCompany: String {

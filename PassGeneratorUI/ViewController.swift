@@ -8,13 +8,23 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITextFieldDelegate {
+class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
 
 	
 	@IBOutlet weak var headerStackView: UIStackView!
 	@IBOutlet weak var subCatStackView: UIStackView!
 	
+	@IBOutlet weak var firstNameTextField: UITextField!
+	@IBOutlet weak var lastNameTextField: UITextField!
+	
+	@IBOutlet weak var dobTextField: UITextField!
+	@IBOutlet weak var ssnTextField: UITextField!
+	
+	@IBOutlet weak var projectPicker: UIPickerView!
+	
 	var headerButtons: [UIButton] = []
+	
+	var pickerItems: [String] =  []
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -39,6 +49,24 @@ class ViewController: UIViewController, UITextFieldDelegate {
 			
 			button.sendActionsForControlEvents(.TouchUpInside)
 		}
+		
+		dobTextField.delegate = self
+		ssnTextField.delegate =  self
+		projectPicker.delegate = self
+		firstNameTextField.delegate = self
+		lastNameTextField.delegate = self
+		
+		dobTextField.tag = fieldTag.dob.rawValue
+		ssnTextField.tag = fieldTag.ssn.rawValue
+		projectPicker.tag = fieldTag.projectNumber.rawValue
+		firstNameTextField.tag = fieldTag.firstName.rawValue
+		lastNameTextField.tag = fieldTag.lastName.rawValue
+		
+		
+		
+		
+		pickerItems = Project.allProjectNumbers()
+		
 	}
 	
 	
@@ -105,10 +133,104 @@ class ViewController: UIViewController, UITextFieldDelegate {
 		return button
 	}
 	
-//	func textFieldShouldEndEditing(textField: UITextField) -> Bool {
-//		
-//		
-//	}
+	func textFieldShouldEndEditing(textField: UITextField) -> Bool {
+		
+		//print(textField.text)
+		
+		print(pickerItems[projectPicker.selectedRowInComponent(0)])
+		
+		switch textField.tag {
+			
+			case fieldTag.dob.rawValue:
+				
+//				guard let textDate = textField.text where textDate != "" else {
+//					
+//					return false
+//				}
+//				
+//				if dateValid(textDate) {
+//					
+//					return true
+//					
+//				} else {
+//					
+//					displayAlert(title: "Invalid Date", message: "Date couldn't be recognized")
+//					return false
+//				}
+			
+				return true
+			
+			case fieldTag.ssn.rawValue:
+				return true
+			case fieldTag.projectNumber.rawValue:
+				return true
+			default:
+				return true
+		}
+	}
+	
+	func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+		
+		switch textField.tag {
+			
+			case fieldTag.ssn.rawValue:
+				
+				return string.rangeOfCharacterFromSet(NSCharacterSet.decimalDigitCharacterSet()) != nil
+			
+			default: return true
+		}
+	}
+	
+	func dateValid(text: String) -> Bool {
+		
+		let dateFormatter = NSDateFormatter()
+		dateFormatter.locale = NSLocale.currentLocale()
+		dateFormatter.dateStyle = .ShortStyle
+		dateFormatter.timeStyle = .NoStyle
+		
+		return dateFormatter.dateFromString(text) != nil
+	}
+	
+	func displayAlert(title title: String, message: String) {
+		
+		let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+		
+		alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+		
+		presentViewController(alert, animated: true, completion: nil)
+	}
+	
+	//MARK: picker conformance
+	
+	func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+		
+		return pickerItems[row]
+	}
+	
+	func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+		
+		return pickerItems.count
+	}
+	
+	func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+		
+		return 1
+	}
+	
+	func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+		
+		print(pickerItems[row])
+	}
+	
+	
+}
+
+enum fieldTag: Int {
+	case dob = 0
+	case ssn
+	case projectNumber
+	case firstName
+	case lastName
 }
 
 //https://medium.com/swift-programming/swift-selector-syntax-sugar-81c8a8b10df3#.ywjyftjut

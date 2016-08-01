@@ -8,19 +8,27 @@
 
 import UIKit
 
+typealias FVP = FieldValidationParameters
+
 class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
 
 	
 	@IBOutlet weak var headerStackView: UIStackView!
 	@IBOutlet weak var subCatStackView: UIStackView!
 	
+	@IBOutlet weak var dobTextField: UITextField!
+	@IBOutlet weak var ssnTextField: UITextField!
+	@IBOutlet weak var projectPicker: UIPickerView!
+	
 	@IBOutlet weak var firstNameTextField: UITextField!
 	@IBOutlet weak var lastNameTextField: UITextField!
 	
-	@IBOutlet weak var dobTextField: UITextField!
-	@IBOutlet weak var ssnTextField: UITextField!
+	@IBOutlet weak var companyTextField: UITextField!
 	
-	@IBOutlet weak var projectPicker: UIPickerView!
+	@IBOutlet weak var streetTextField: UITextField!
+	@IBOutlet weak var cityTextField: UITextField!
+	@IBOutlet weak var stateTextField: UITextField!
+	@IBOutlet weak var zipTextField: UITextField!
 	
 	var headerButtons: [UIButton] = []
 	
@@ -55,18 +63,25 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		projectPicker.delegate = self
 		firstNameTextField.delegate = self
 		lastNameTextField.delegate = self
+		companyTextField.delegate = self
+		streetTextField.delegate = self
+		cityTextField.delegate = self
+		stateTextField.delegate = self
+		zipTextField.delegate = self
 		
-		dobTextField.tag = fieldTag.dob.rawValue
-		ssnTextField.tag = fieldTag.ssn.rawValue
-		projectPicker.tag = fieldTag.projectNumber.rawValue
-		firstNameTextField.tag = fieldTag.firstName.rawValue
-		lastNameTextField.tag = fieldTag.lastName.rawValue
-		
-		
-		
+		dobTextField.tag = FVP.fieldTag.dob.rawValue
+		ssnTextField.tag = FVP.fieldTag.ssn.rawValue
+		projectPicker.tag = FVP.fieldTag.projectNumber.rawValue
+		firstNameTextField.tag = FVP.fieldTag.firstName.rawValue
+		lastNameTextField.tag = FVP.fieldTag.lastName.rawValue
+		companyTextField.tag = FVP.fieldTag.company.rawValue
+		streetTextField.tag = FVP.fieldTag.street.rawValue
+		cityTextField.tag = FVP.fieldTag.city.rawValue
+		stateTextField.tag = FVP.fieldTag.state.rawValue
+		zipTextField.tag = FVP.fieldTag.zip.rawValue
 		
 		pickerItems = Project.allProjectNumbers()
-		
+
 	}
 	
 	
@@ -106,10 +121,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		sender.setTitleColor(UIColor.whiteColor(), forState: .Normal)
 	}
 
-	override func didReceiveMemoryWarning() {
-		super.didReceiveMemoryWarning()
-		// Dispose of any resources that can be recreated.
-	}
 	
 	func addButtonTo(stack stackView: UIStackView, text: String, tag: Int, bgColor: UIColor, titleColor: UIColor, action: Selector) {
 		
@@ -139,43 +150,72 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		
 		print(pickerItems[projectPicker.selectedRowInComponent(0)])
 		
-		switch textField.tag {
-			
-			case fieldTag.dob.rawValue:
-				
-//				guard let textDate = textField.text where textDate != "" else {
-//					
-//					return false
-//				}
+//		switch textField.tag {
+//			
+//			case fieldTag.dob.rawValue:
 //				
-//				if dateValid(textDate) {
-//					
-//					return true
-//					
-//				} else {
-//					
-//					displayAlert(title: "Invalid Date", message: "Date couldn't be recognized")
-//					return false
-//				}
-			
-				return true
-			
-			case fieldTag.ssn.rawValue:
-				return true
-			case fieldTag.projectNumber.rawValue:
-				return true
-			default:
-				return true
-		}
+////				guard let textDate = textField.text where textDate != "" else {
+////					
+////					return false
+////				}
+////				
+////				if dateValid(textDate) {
+////					
+////					return true
+////					
+////				} else {
+////					
+////					displayAlert(title: "Invalid Date", message: "Date couldn't be recognized")
+////					return false
+////				}
+//			
+//				return true
+//			
+//			case fieldTag.ssn.rawValue:
+//				return true
+//			case fieldTag.projectNumber.rawValue:
+//				return true
+//			default:
+//				return true
+//		}
+		
+		return true
 	}
 	
 	func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
 		
+		//let fvp = FVP().charCountByTag[]
+		
+		if let fieldSpec = FVP().getSpec(textField.tag) {
+			
+			let expectedLength = fieldSpec.expectedCharCount
+			let mandatory = fieldSpec.mandatory
+			
+			//let match = mandatory ?
+			
+			if mandatory {
+				
+				
+				
+			} else {
+				
+				
+			}
+		}
+		
 		switch textField.tag {
 			
-			case fieldTag.ssn.rawValue:
+			
+			
+			case FVP.fieldTag.ssn.rawValue:
 				
-				return string.rangeOfCharacterFromSet(NSCharacterSet.decimalDigitCharacterSet()) != nil
+				return string.rangeOfCharacterFromSet(NSCharacterSet.decimalDigitCharacterSet()) != nil && textField.text?.characters.count < 9
+			
+//		case fieldTag.firstName.rawValue, fieldTag.lastName.rawValue:
+//			
+//			if textField.text?.characters.count > 50 {
+//				
+//			}
 			
 			default: return true
 		}
@@ -222,16 +262,68 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		print(pickerItems[row])
 	}
 	
+	//	override func didReceiveMemoryWarning() {
+	//		super.didReceiveMemoryWarning()
+	//		// Dispose of any resources that can be recreated.
+	//	}
+	
+	
+
 	
 }
 
-enum fieldTag: Int {
-	case dob = 0
-	case ssn
-	case projectNumber
-	case firstName
-	case lastName
+struct FieldValidationParameters {
+	
+	enum fieldTag: Int {
+		case dob = 0
+		case ssn
+		case projectNumber
+		case firstName
+		case lastName
+		case company
+		case street
+		case city
+		case state
+		case zip
+	}
+	
+	struct CharCountSpec {
+		let expectedCharCount: Int
+		let mandatory: Bool
+		let dataType: fieldDataType
+	}
+	
+	enum fieldDataType {
+		case text
+		case integer
+		case date
+	}
+	
+	let charCountByTag: [fieldTag: CharCountSpec] = [
+		
+		fieldTag.city: CharCountSpec(expectedCharCount: 15, mandatory: false, dataType: .text),
+		fieldTag.company: CharCountSpec(expectedCharCount: 20, mandatory: false, dataType: .text),
+		fieldTag.firstName: CharCountSpec(expectedCharCount: 20, mandatory: false, dataType: .text),
+		fieldTag.lastName: CharCountSpec(expectedCharCount: 20, mandatory: false, dataType: .text),
+		fieldTag.ssn: CharCountSpec(expectedCharCount: 9, mandatory: true, dataType: .integer),
+		fieldTag.state: CharCountSpec(expectedCharCount: 2, mandatory: true, dataType: .text),
+		fieldTag.zip: CharCountSpec(expectedCharCount: 5, mandatory: true, dataType: .integer),
+		fieldTag.dob: CharCountSpec(expectedCharCount: 10, mandatory: true, dataType: .date)
+	]
+	
+	
+	
+	func getSpec(tag: Int) -> CharCountSpec? {
+		
+		guard let ftag = fieldTag(rawValue: tag) else {
+			
+			return nil
+		}
+		
+		return charCountByTag[ftag]
+	}
 }
+
 
 //https://medium.com/swift-programming/swift-selector-syntax-sugar-81c8a8b10df3#.ywjyftjut
 private extension Selector {

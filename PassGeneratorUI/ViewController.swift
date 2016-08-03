@@ -149,47 +149,35 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	
 	func textFieldShouldEndEditing(textField: UITextField) -> Bool {
 		
+		var validationFunction: (validatedText: String) -> Bool
+		
 		switch textField.tag {
 			
 			case FVP.fieldTag.dob.rawValue:
 				
-				if let textDate = textField.text where dateValid(textDate) {
-					
-					textField.backgroundColor = nil //default transparent
-					
-					return true
-					
-				} else {
-					
-					textField.backgroundColor = UIColor(red: 1, green: 123/255.0, blue: 162/255.0, alpha: 1)
-					
-					return false
-				}
+				validationFunction = dateValid
 			
 			case FVP.fieldTag.ssn.rawValue:
 				
-				let regex = "^\\d{3}-\\d{2}-\\d{4}$"
-				
-				if let ssn = textField.text where ssnValid(ssn, against: regex) {
-					
-					textField.backgroundColor = nil
-					return true
-				
-				} else {
-					
-					textField.backgroundColor = UIColor(red: 1, green: 123/255.0, blue: 162/255.0, alpha: 1)
-					
-					return false
-				}
-			
-			
-				//return true
+				validationFunction = ssnValid
 			
 			default:
 				
 				return true
 		}
 		
+		if let candidate = textField.text where validationFunction(validatedText: candidate) {
+			
+			textField.backgroundColor = nil //default transparent
+			
+			return true
+			
+		} else {
+			
+			textField.backgroundColor = UIColor(red: 1, green: 123/255.0, blue: 162/255.0, alpha: 1) //pink
+			
+			return false
+		}
 		
 	}
 	
@@ -206,6 +194,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		dateFormatter.timeStyle = .NoStyle
 		
 		return dateFormatter.dateFromString(text) != nil
+	}
+	
+	func ssnValid(value: String) -> Bool {
+		
+		let regex = "^\\d{3}-\\d{2}-\\d{4}$"
+		
+		let test = NSPredicate(format: "SELF MATCHES %@", regex)
+		return test.evaluateWithObject(value)
 	}
 	
 	func displayAlert(title title: String, message: String) {
@@ -242,10 +238,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	//		// Dispose of any resources that can be recreated.
 	//	}
 	
-	func ssnValid(value: String, against regex: String) -> Bool {
-		let test = NSPredicate(format: "SELF MATCHES %@", regex)
-		return test.evaluateWithObject(value)
-	}
+	
 
 	
 }

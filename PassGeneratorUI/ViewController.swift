@@ -90,6 +90,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		}
 	}
 	
+	override func viewWillAppear(animated: Bool) {
+		streetTextField.text = ""
+	}
+	
 	func fillChildStack(sender: UIButton!){
 		
 		for button in headerButtons {
@@ -265,6 +269,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		print(pickerItems[row])
 	}
 
+	@IBAction func generatePassButtonTapped(sender: AnyObject) {
+		
+		if let passController = storyboard?.instantiateViewControllerWithIdentifier("passViewController") as? PassViewController {
+		
+			presentViewController(passController, animated: true, completion: nil)
+		}
+	}
 	
 }
 

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2CEE84A31D52497400E0D4D8 /* PassViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEE84A21D52497400E0D4D8 /* PassViewController.swift */; };
 		2CF481BB1D49CB4800E87533 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF481BA1D49CB4800E87533 /* AppDelegate.swift */; };
 		2CF481BD1D49CB4800E87533 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF481BC1D49CB4800E87533 /* ViewController.swift */; };
 		2CF481C01D49CB4800E87533 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2CF481BE1D49CB4800E87533 /* Main.storyboard */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2CEE84A21D52497400E0D4D8 /* PassViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PassViewController.swift; sourceTree = "<group>"; };
 		2CF481B71D49CB4700E87533 /* PassGeneratorUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PassGeneratorUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CF481BA1D49CB4800E87533 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2CF481BC1D49CB4800E87533 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 				2CF481C31D49CB4800E87533 /* LaunchScreen.storyboard */,
 				2CF481C61D49CB4800E87533 /* Info.plist */,
 				2CF481DA1D49E61600E87533 /* EntrantDataModel.swift */,
+				2CEE84A21D52497400E0D4D8 /* PassViewController.swift */,
 			);
 			path = PassGeneratorUI;
 			sourceTree = "<group>";
@@ -167,6 +170,7 @@
 				2CF481D51D49CB9D00E87533 /* RideAccessController.swift in Sources */,
 				2CF481BB1D49CB4800E87533 /* AppDelegate.swift in Sources */,
 				2CF481D11D49CB9D00E87533 /* AudioServices.swift in Sources */,
+				2CEE84A31D52497400E0D4D8 /* PassViewController.swift in Sources */,
 				2CF481D21D49CB9D00E87533 /* Auxilliary.swift in Sources */,
 				2CF481D31D49CB9D00E87533 /* Entrants.swift in Sources */,
 			);

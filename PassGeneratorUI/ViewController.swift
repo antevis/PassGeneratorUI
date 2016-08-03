@@ -82,6 +82,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		
 		pickerItems = Project.allProjectNumbers()
 		
+		//Make birth date placeholder locale-dependant
 		if let dateFormatPlaceHolder = NSDateFormatter.dateFormatFromTemplate("MMddyyyy", options: 0, locale: NSLocale.currentLocale()) {
 			
 			dobTextField.placeholder = dateFormatPlaceHolder.uppercaseString
@@ -181,21 +182,19 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 			
 			textField.backgroundColor = nil //default transparent
 			
-			return true
-			
 		} else {
 			
 			textField.backgroundColor = UIColor(red: 1, green: 123/255.0, blue: 162/255.0, alpha: 1) //pink
-			
-			return false
 		}
+		
+		return true
 		
 	}
 	
-	func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-		
-		return true
-	}
+//	func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+//		
+//		return true
+//	}
 	
 	func dateValid(text: String, len: Int? = nil) -> Bool {
 		
@@ -228,8 +227,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 			return false
 		}
 		
-		
-		
 		return value.characters.count <= len
 	}
 	
@@ -247,7 +244,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	}
 	
 	//MARK: picker conformance
-	
 	func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
 		
 		return pickerItems[row]
@@ -267,13 +263,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		
 		print(pickerItems[row])
 	}
-	
-	//	override func didReceiveMemoryWarning() {
-	//		super.didReceiveMemoryWarning()
-	//		// Dispose of any resources that can be recreated.
-	//	}
-	
-	
 
 	
 }
@@ -312,12 +301,11 @@ struct FieldValidationParameters {
 		fieldTag.firstName: CharCountSpec(expectedCharCount: 20, mandatory: false, dataType: .text),
 		fieldTag.lastName: CharCountSpec(expectedCharCount: 20, mandatory: false, dataType: .text),
 		fieldTag.ssn: CharCountSpec(expectedCharCount: 9, mandatory: true, dataType: .integer),
+		fieldTag.street: CharCountSpec(expectedCharCount: 100, mandatory: false, dataType: .text),
 		fieldTag.state: CharCountSpec(expectedCharCount: 2, mandatory: true, dataType: .text),
 		fieldTag.zip: CharCountSpec(expectedCharCount: 5, mandatory: true, dataType: .integer),
 		fieldTag.dob: CharCountSpec(expectedCharCount: 10, mandatory: true, dataType: .date)
 	]
-	
-	
 	
 	func getSpec(tag: Int) -> CharCountSpec? {
 		

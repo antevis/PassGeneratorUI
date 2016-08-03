@@ -157,7 +157,7 @@
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
                     <connections>
-                        <outlet property="CityTextField" destination="387-hW-sfJ" id="uko-zQ-tBA"/>
+                        <outlet property="cityTextField" destination="387-hW-sfJ" id="fuj-8p-l1a"/>
                         <outlet property="companyTextField" destination="exf-kl-wuO" id="nB6-Gv-Xf3"/>
                         <outlet property="dobTextField" destination="dZb-jq-ARE" id="Rhy-4q-8gk"/>
                         <outlet property="firstNameTextField" destination="sHF-Bd-Sdk" id="DCd-M4-5C6"/>

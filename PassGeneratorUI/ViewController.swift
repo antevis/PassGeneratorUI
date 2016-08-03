@@ -29,6 +29,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	@IBOutlet weak var cityTextField: UITextField!
 	@IBOutlet weak var stateTextField: UITextField!
 	@IBOutlet weak var zipTextField: UITextField!
+	@IBOutlet weak var validateSwitch: UISwitch!
 	
 	var headerButtons: [UIButton] = []
 	
@@ -284,7 +285,7 @@ struct FieldValidationParameters {
 	
 	struct CharCountSpec {
 		let expectedCharCount: Int
-		let mandatory: Bool
+		let mandatoryCharCountMatch: Bool
 		let dataType: fieldDataType
 	}
 	
@@ -296,15 +297,15 @@ struct FieldValidationParameters {
 	
 	let charCountByTag: [fieldTag: CharCountSpec] = [
 		
-		fieldTag.city: CharCountSpec(expectedCharCount: 15, mandatory: false, dataType: .text),
-		fieldTag.company: CharCountSpec(expectedCharCount: 20, mandatory: false, dataType: .text),
-		fieldTag.firstName: CharCountSpec(expectedCharCount: 20, mandatory: false, dataType: .text),
-		fieldTag.lastName: CharCountSpec(expectedCharCount: 20, mandatory: false, dataType: .text),
-		fieldTag.ssn: CharCountSpec(expectedCharCount: 9, mandatory: true, dataType: .integer),
-		fieldTag.street: CharCountSpec(expectedCharCount: 100, mandatory: false, dataType: .text),
-		fieldTag.state: CharCountSpec(expectedCharCount: 2, mandatory: true, dataType: .text),
-		fieldTag.zip: CharCountSpec(expectedCharCount: 5, mandatory: true, dataType: .integer),
-		fieldTag.dob: CharCountSpec(expectedCharCount: 10, mandatory: true, dataType: .date)
+		fieldTag.city: CharCountSpec(expectedCharCount: 15, mandatoryCharCountMatch: false, dataType: .text),
+		fieldTag.company: CharCountSpec(expectedCharCount: 20, mandatoryCharCountMatch: false, dataType: .text),
+		fieldTag.firstName: CharCountSpec(expectedCharCount: 20, mandatoryCharCountMatch: false, dataType: .text),
+		fieldTag.lastName: CharCountSpec(expectedCharCount: 20, mandatoryCharCountMatch: false, dataType: .text),
+		fieldTag.ssn: CharCountSpec(expectedCharCount: 9, mandatoryCharCountMatch: true, dataType: .integer),
+		fieldTag.street: CharCountSpec(expectedCharCount: 100, mandatoryCharCountMatch: false, dataType: .text),
+		fieldTag.state: CharCountSpec(expectedCharCount: 2, mandatoryCharCountMatch: true, dataType: .text)
+		//fieldTag.zip: CharCountSpec(expectedCharCount: 5, mandatoryCharCountMatch: true, dataType: .integer),
+		//fieldTag.dob: CharCountSpec(expectedCharCount: 10, mandatoryCharCountMatch: true, dataType: .date)
 	]
 	
 	func getSpec(tag: Int) -> CharCountSpec? {

@@ -144,6 +144,15 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dZ9-EU-PkP">
+                                <rect key="frame" x="211" y="747" width="51" height="31"/>
+                            </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Check Text Length" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mwd-8a-g8D">
+                                <rect key="frame" x="28" y="752" width="144" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -168,6 +177,7 @@
                         <outlet property="stateTextField" destination="9gq-lz-zXy" id="PEb-fV-Vjv"/>
                         <outlet property="streetTextField" destination="nd8-B5-IvS" id="oiV-hH-gQk"/>
                         <outlet property="subCatStackView" destination="zf8-dp-vIv" id="aIy-3d-oCm"/>
+                        <outlet property="validateSwitch" destination="dZ9-EU-PkP" id="NDq-Ge-1H9"/>
                         <outlet property="zipTextField" destination="Tzj-yv-VyB" id="eIO-Vj-scH"/>
                     </connections>
                 </viewController>

@@ -320,6 +320,7 @@
 				2CF481CB1D49CB4800E87533 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

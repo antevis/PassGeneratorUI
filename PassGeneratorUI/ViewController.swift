@@ -84,10 +84,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		
 		if let dateFormatPlaceHolder = NSDateFormatter.dateFormatFromTemplate("MMddyyyy", options: 0, locale: NSLocale.currentLocale()) {
 			
-			dobTextField.placeholder = dateFormatPlaceHolder
+			dobTextField.placeholder = dateFormatPlaceHolder.uppercaseString
 		}
-		
-		
 	}
 	
 	func fillChildStack(sender: UIButton!){
@@ -151,20 +149,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	
 	func textFieldShouldEndEditing(textField: UITextField) -> Bool {
 		
-		//print(textField.text)
-		
-		//print(pickerItems[projectPicker.selectedRowInComponent(0)])
-		
 		switch textField.tag {
 			
 			case FVP.fieldTag.dob.rawValue:
 				
-				guard let textDate = textField.text where textDate != "" else {
-					
-					return false
-				}
-				
-				if dateValid(textDate) {
+				if let textDate = textField.text where dateValid(textDate) {
 					
 					textField.backgroundColor = nil //default transparent
 					
@@ -173,9 +162,28 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 				} else {
 					
 					textField.backgroundColor = UIColor(red: 1, green: 123/255.0, blue: 162/255.0, alpha: 1)
+					
 					return false
 				}
 			
+			case FVP.fieldTag.ssn.rawValue:
+				
+				let regex = "^\\d{3}-\\d{2}-\\d{4}$"
+				
+				if let ssn = textField.text where ssnValid(ssn, against: regex) {
+					
+					textField.backgroundColor = nil
+					return true
+				
+				} else {
+					
+					textField.backgroundColor = UIColor(red: 1, green: 123/255.0, blue: 162/255.0, alpha: 1)
+					
+					return false
+				}
+			
+			
+				//return true
 			
 			default:
 				
@@ -234,7 +242,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	//		// Dispose of any resources that can be recreated.
 	//	}
 	
-	
+	func ssnValid(value: String, against regex: String) -> Bool {
+		let test = NSPredicate(format: "SELF MATCHES %@", regex)
+		return test.evaluateWithObject(value)
+	}
 
 	
 }

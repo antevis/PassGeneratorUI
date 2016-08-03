@@ -149,7 +149,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	
 	func textFieldShouldEndEditing(textField: UITextField) -> Bool {
 		
-		var validationFunction: (validatedText: String) -> Bool
+		var validationFunction: (validatedText: String, len: Int?) -> Bool
+		
+		var len: Int?
 		
 		switch textField.tag {
 			
@@ -161,12 +163,21 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 				
 				validationFunction = ssnValid
 			
+			case FVP.fieldTag.zip.rawValue:
+				
+				validationFunction = zipValid
+			
+			case FVP.fieldTag.city.rawValue, FVP.fieldTag.company.rawValue, FVP.fieldTag.firstName.rawValue, FVP.fieldTag.lastName.rawValue, FVP.fieldTag.state.rawValue, FVP.fieldTag.street.rawValue:
+				
+				validationFunction = lengthValid
+				len = FVP().getSpec(textField.tag)?.expectedCharCount
+			
 			default:
 				
 				return true
 		}
 		
-		if let candidate = textField.text where validationFunction(validatedText: candidate) {
+		if let candidate = textField.text where validationFunction(validatedText: candidate, len: len) {
 			
 			textField.backgroundColor = nil //default transparent
 			
@@ -186,7 +197,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		return true
 	}
 	
-	func dateValid(text: String) -> Bool {
+	func dateValid(text: String, len: Int? = nil) -> Bool {
 		
 		let dateFormatter = NSDateFormatter()
 		dateFormatter.locale = NSLocale.currentLocale()
@@ -196,9 +207,33 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		return dateFormatter.dateFromString(text) != nil
 	}
 	
-	func ssnValid(value: String) -> Bool {
+	func ssnValid(value: String, len: Int? = nil) -> Bool {
 		
 		let regex = "^\\d{3}-\\d{2}-\\d{4}$"
+		
+		return valid(value, against: regex)
+	}
+	
+	func zipValid(value: String, len: Int? = nil) -> Bool {
+		
+		let regex = "\\d{5}"
+		
+		return valid(value, against: regex)
+	}
+	
+	func lengthValid(value: String, len: Int?) -> Bool {
+		
+		guard let len = len else {
+			
+			return false
+		}
+		
+		
+		
+		return value.characters.count <= len
+	}
+	
+	func valid(value: String, against regex: String) -> Bool {
 		
 		let test = NSPredicate(format: "SELF MATCHES %@", regex)
 		return test.evaluateWithObject(value)

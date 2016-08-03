@@ -81,9 +81,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		zipTextField.tag = FVP.fieldTag.zip.rawValue
 		
 		pickerItems = Project.allProjectNumbers()
-
+		
+		if let dateFormatPlaceHolder = NSDateFormatter.dateFormatFromTemplate("MMddyyyy", options: 0, locale: NSLocale.currentLocale()) {
+			
+			dobTextField.placeholder = dateFormatPlaceHolder
+		}
+		
+		
 	}
-	
 	
 	func fillChildStack(sender: UIButton!){
 		
@@ -148,77 +153,41 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		
 		//print(textField.text)
 		
-		print(pickerItems[projectPicker.selectedRowInComponent(0)])
+		//print(pickerItems[projectPicker.selectedRowInComponent(0)])
 		
-//		switch textField.tag {
-//			
-//			case fieldTag.dob.rawValue:
-//				
-////				guard let textDate = textField.text where textDate != "" else {
-////					
-////					return false
-////				}
-////				
-////				if dateValid(textDate) {
-////					
-////					return true
-////					
-////				} else {
-////					
-////					displayAlert(title: "Invalid Date", message: "Date couldn't be recognized")
-////					return false
-////				}
-//			
-//				return true
-//			
-//			case fieldTag.ssn.rawValue:
-//				return true
-//			case fieldTag.projectNumber.rawValue:
-//				return true
-//			default:
-//				return true
-//		}
+		switch textField.tag {
+			
+			case FVP.fieldTag.dob.rawValue:
+				
+				guard let textDate = textField.text where textDate != "" else {
+					
+					return false
+				}
+				
+				if dateValid(textDate) {
+					
+					textField.backgroundColor = nil //default transparent
+					
+					return true
+					
+				} else {
+					
+					textField.backgroundColor = UIColor(red: 1, green: 123/255.0, blue: 162/255.0, alpha: 1)
+					return false
+				}
+			
+			
+			default:
+				
+				return true
+		}
 		
-		return true
+		
 	}
 	
 	func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
 		
-		//let fvp = FVP().charCountByTag[]
-		
-		if let fieldSpec = FVP().getSpec(textField.tag) {
-			
-			let expectedLength = fieldSpec.expectedCharCount
-			let mandatory = fieldSpec.mandatory
-			
-			//let match = mandatory ?
-			
-			if mandatory {
-				
-				
-				
-			} else {
-				
-				
-			}
-		}
-		
-		switch textField.tag {
-			
-			
-			
-			case FVP.fieldTag.ssn.rawValue:
-				
-				return string.rangeOfCharacterFromSet(NSCharacterSet.decimalDigitCharacterSet()) != nil && textField.text?.characters.count < 9
-			
-//		case fieldTag.firstName.rawValue, fieldTag.lastName.rawValue:
-//			
-//			if textField.text?.characters.count > 50 {
-//				
-//			}
-			
-			default: return true
-		}
+		return true
 	}
 	
 	func dateValid(text: String) -> Bool {
@@ -234,9 +203,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	func displayAlert(title title: String, message: String) {
 		
 		let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-		
 		alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-		
 		presentViewController(alert, animated: true, completion: nil)
 	}
 	

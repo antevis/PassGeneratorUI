@@ -83,48 +83,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	//MARK: UITextFieldDelegate conformance + text field validation
 	func textFieldShouldEndEditing(textField: UITextField) -> Bool {
 		
-		var validationFunction: (validatedText: String, len: Int?) -> Bool
-		
-		var len: Int?
-		
-		switch textField.tag {
-			
-			case FVP.fieldTag.dob.rawValue:
-				
-				validationFunction = dateValid
-			
-			case FVP.fieldTag.ssn.rawValue:
-				
-				validationFunction = ssnValid
-			
-			case FVP.fieldTag.zip.rawValue:
-				
-				validationFunction = zipValid
-			
-			case FVP.fieldTag.company.rawValue:
-			
-				validationFunction = vendorCompanyValid
-			
-			case FVP.fieldTag.city.rawValue, FVP.fieldTag.firstName.rawValue, FVP.fieldTag.lastName.rawValue, FVP.fieldTag.state.rawValue, FVP.fieldTag.street.rawValue:
-				
-				validationFunction = lengthValid
-				len = FVP().getSpec(textField.tag)?.expectedCharCount
-			
-			default:
-				
-				return true
-		}
-		
-		if let candidate = textField.text where validationFunction(validatedText: candidate, len: len) {
-			
-			textField.backgroundColor = nil //default transparent
-			
-		} else {
-			
-			textField.backgroundColor = UIColor(red: 1, green: 123/255.0, blue: 162/255.0, alpha: 1) //pink
-		}
-		
-		return true
+		return valueValidationPassedFor(textField)
 		
 	}
 	
@@ -180,7 +139,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 			return false
 		}
 		
-		return value.characters.count <= len
+		return value.characters.count <= len && value.characters.count > 0
 	}
 	
 	func vendorCompanyValid(value: String, len: Int?) -> Bool {
@@ -193,6 +152,74 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		
 		let test = NSPredicate(format: "SELF MATCHES %@", regex)
 		return test.evaluateWithObject(value)
+	}
+	
+	func validationPassedFor(fields: [UITextField]) -> Bool {
+		
+		for field in fields {
+			
+			if !valueValidationPassedFor(field, restrict: true) {
+				
+				displayAlertRespectiveTo(field)
+				
+				return false
+			}
+		}
+		
+		return true
+	}
+	
+	func valueValidationPassedFor(textField: UITextField, restrict: Bool = false) -> Bool {
+		
+		var validationFunction: (validatedText: String, len: Int?) -> Bool
+		
+		var len: Int?
+		
+		switch textField.tag {
+			
+		case FVP.fieldTag.dob.rawValue:
+			
+			validationFunction = dateValid
+			
+		case FVP.fieldTag.ssn.rawValue:
+			
+			validationFunction = ssnValid
+			
+		case FVP.fieldTag.zip.rawValue:
+			
+			validationFunction = zipValid
+			
+		case FVP.fieldTag.company.rawValue:
+			
+			validationFunction = vendorCompanyValid
+			
+		case FVP.fieldTag.city.rawValue, FVP.fieldTag.firstName.rawValue, FVP.fieldTag.lastName.rawValue, FVP.fieldTag.state.rawValue, FVP.fieldTag.street.rawValue:
+			
+			validationFunction = lengthValid
+			len = FVP().getSpec(textField.tag)?.expectedCharCount
+			
+		default:
+			
+			return true
+		}
+		
+		if let candidate = textField.text where validationFunction(validatedText: candidate, len: len) {
+			
+			textField.backgroundColor = nil //default transparent
+			
+		} else {
+			
+			textField.backgroundColor = UIColor(red: 1, green: 123/255.0, blue: 162/255.0, alpha: 1) //pink
+			
+			if restrict {
+				
+				displayAlertRespectiveTo(textField)
+				
+				return false
+			}
+		}
+		
+		return true
 	}
 	
 	
@@ -291,60 +318,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		
 		var entrant: HourlyEmployeeCatering?
 		
-		
-		var validated: Bool = true
-		
-		if let currentEntrant = currentEntrant, let fields = fieldsByEntrant[currentEntrant] {
-			
-			for field in fields {
-				
-				if let candidate = field.text {
-				
-					if let spec = FVP().getSpec(field.tag) {
-						
-						if candidate.characters.count > spec.expectedCharCount {
-							
-							if spec.mandatoryCharCountMatch {
-								
-								displayAlert(title: "Error", message: "\(spec.description) length exeeds maximum allowed length of \(spec.expectedCharCount)")
-								
-								validated = false
-							
-							} else {
-								
-								
-								if self.presentedViewController == nil {
-							
-									let alert = UIAlertController(title: "Warning", message: "\(spec.description) exceeds expected length of \(spec.expectedCharCount). Use it anyway?", preferredStyle: .Alert)
-									alert.addAction(UIAlertAction(title: "Yes", style: .Destructive, handler: nil))
-									alert.addAction(UIAlertAction(title:"No", style: .Default, handler: {_ in validated = false }))
-									
-									presentViewController(alert, animated: true, completion: nil)
-								}
-								
-							}
-						} else {
-							
-							if candidate.characters.count == 0 {
-								
-								displayAlert(title: "Error", message: "\(spec.description) not specified")
-							}
-						}
-						
-					} else {
-						
-						validated = false
-					}
-					
-				} else {
-					
-					validated = false
-				}
-			}
-		}
-		
-		if validated {
-			
+		if let currentEntrant = currentEntrant, let fields = fieldsByEntrant[currentEntrant] where validationPassedFor(fields) {
 			
 			guard let ssn = ssnTextField.text else {
 				
@@ -371,30 +345,30 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 				
 				displayAlert(title: "Error", message: message)
 				
-
+				
 			} catch EntrantError.AddressStateMissing(let message) {
 				displayAlert(title: "Error", message: message)
 				
-
+				
 				
 			}catch EntrantError.AddressStreetMissing(let message){
 				
 				displayAlert(title: "Error", message: message)
 				
-
+				
 			} catch EntrantError.AddressZipMissing(let message) {
 				
 				displayAlert(title: "Error", message: message)
 				
-
+				
 			} catch {
 				
 				fatalError()
-
+				
 			}
 			
 			if let address = address {
-			
+				
 				do {
 					
 					try entrant = HourlyEmployeeCatering(fullName: fullName, address: address, ssn: ssn, birthDate: birthDate)
@@ -413,7 +387,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 					fatalError()
 				}
 			}
-			
 		}
 		
 		return entrant
@@ -614,6 +587,43 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 			presentViewController(alert, animated: true, completion: nil)
 			
 		}
+	}
+	
+	func displayAlertRespectiveTo(textField: UITextField) {
+		
+		var message: String
+		
+		switch textField.tag {
+			
+		case FVP.fieldTag.dob.rawValue:
+			
+			message = "Unable to Recognize Date of Birth"
+			
+		case FVP.fieldTag.ssn.rawValue:
+			
+			message = "Unable to Recognize Social Security Number"
+			
+		case FVP.fieldTag.zip.rawValue:
+			
+			message = "ZIP-Code Should Contain 5 Digits"
+			
+		case FVP.fieldTag.company.rawValue:
+			
+			message = "Vendor Company Not Recognized"
+			
+		case FVP.fieldTag.city.rawValue, FVP.fieldTag.firstName.rawValue, FVP.fieldTag.lastName.rawValue, FVP.fieldTag.state.rawValue, FVP.fieldTag.street.rawValue:
+			
+			let spec = FVP().getSpec(textField.tag)
+			
+			message = "\(spec?.description ?? "Value") Shouldn't be empty and exceed \(spec?.expectedCharCount.description ?? "Given threshold of") characters"
+			
+		default:
+			
+			message = "Unable to recognize given value"
+		}
+		
+		
+		displayAlert(title: "Error", message: message)
 	}
 	
 	func disableAllFields() {

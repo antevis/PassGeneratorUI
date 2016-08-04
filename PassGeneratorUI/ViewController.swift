@@ -58,10 +58,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	
 	var pickerItems: [String] =  []
 	
-	var fieldsByEntrant: [EntrantSubCategory: [UITextField!]] = [:]
+	var fieldsByEntrant: [EntrantSubCategory: [UITextField]] = [:]
 	
 	var currentParentTag: Int = 0
 	var currentChildTag: Int = 0
+	
+	var currentEntrant: EntrantSubCategory?// EntrantType.Type?
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -154,12 +156,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	
 	func dateValid(text: String, len: Int? = nil) -> Bool {
 		
-		let dateFormatter = NSDateFormatter()
-		dateFormatter.locale = NSLocale.currentLocale()
-		dateFormatter.dateStyle = .ShortStyle
-		dateFormatter.timeStyle = .NoStyle
-		
-		return dateFormatter.dateFromString(text) != nil
+		return Aux.nsDateFrom(string: text) != nil
 	}
 	
 	func ssnValid(value: String, len: Int? = nil) -> Bool {
@@ -223,11 +220,238 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	//MARK: Events
 	@IBAction func generatePassButtonTapped(sender: AnyObject) {
 		
+		var entrant: EntrantType?
+		
+		if let subCat = currentEntrant {
+			
+//			let fieldsToValidate = fieldsByEntrant[subCat]
+			
+			switch subCat {
 				
-		if let passController = storyboard?.instantiateViewControllerWithIdentifier("passViewController") as? PassViewController {
+				case .classicGuest: entrant = classicGuest()
+				case .contractEmployee: entrant = contractEmployee()
+				case .freeChileGuest: entrant = freeChild()
+				case .generalManager, .shiftManager, .seniorManager: entrant = manager()
+				case .hourlyEmployeeFood: entrant = hourlyFood()
+				case .hourlyEmployeeMaintenance: entrant = hourlyMaintenance()
+				case .hourlyEmployeeRideServices: entrant = hourlyRide()
+				case .seasonPassGuest: entrant = seasonPassGuest()
+				case .seniorGuest: entrant = seniorGuest()
+				case .vendorRepresentative: entrant = vendor()
+				case .vipGuest: entrant = vipGuest()
+			}
+		}
+				
+		if let entrant = entrant, passController = storyboard?.instantiateViewControllerWithIdentifier("passViewController") as? PassViewController {
+			
+			passController.entrant = entrant
 		
 			presentViewController(passController, animated: true, completion: nil)
 		}
+	}
+	
+	func classicGuest() -> ClassicGuest? {
+		
+		return ClassicGuest()
+	}
+	
+	func vipGuest() -> VipGuest? {
+		
+		return VipGuest()
+	}
+	
+	func freeChild() -> FreeChildGuest? {
+		
+		var entrant: FreeChildGuest?
+		
+		guard let dateString = dobTextField.text, let birthDate = Aux.nsDateFrom(string: dateString) else {
+			
+			displayAlert(title: "Error", message: "Birth date couldn't be recognized.")
+			
+			return nil
+		}
+		
+		do {
+			
+			try entrant = FreeChildGuest(birthDate: birthDate)
+			
+		} catch EntrantError.NotAKidAnymore(let yearThreshold) {
+			
+			displayAlert(title: "Error", message: "Looks too grown-up for \(yearThreshold)-year old:)")
+			
+		} catch {
+			
+			fatalError()
+		}
+		
+		return entrant
+	}
+	
+	func hourlyFood() -> HourlyEmployeeCatering? {
+		
+		var entrant: HourlyEmployeeCatering?
+		
+		
+		var validated: Bool = true
+		
+		if let currentEntrant = currentEntrant, let fields = fieldsByEntrant[currentEntrant] {
+			
+			for field in fields {
+				
+				if let candidate = field.text {
+				
+					if let spec = FVP().getSpec(field.tag) {
+						
+						if candidate.characters.count > spec.expectedCharCount {
+							
+							if spec.mandatoryCharCountMatch {
+								
+								displayAlert(title: "Error", message: "\(spec.description) length exeeds maximum allowed length of \(spec.expectedCharCount)")
+								
+								validated = false
+							
+							} else {
+								
+								
+								if self.presentedViewController == nil {
+							
+									let alert = UIAlertController(title: "Warning", message: "\(spec.description) exceeds expected length of \(spec.expectedCharCount). Use it anyway?", preferredStyle: .Alert)
+									alert.addAction(UIAlertAction(title: "Yes", style: .Destructive, handler: nil))
+									alert.addAction(UIAlertAction(title:"No", style: .Default, handler: {_ in validated = false }))
+									
+									presentViewController(alert, animated: true, completion: nil)
+								}
+								
+							}
+						} else {
+							
+							if candidate.characters.count == 0 {
+								
+								displayAlert(title: "Error", message: "\(spec.description) not specified")
+							}
+						}
+						
+					} else {
+						
+						validated = false
+					}
+					
+				} else {
+					
+					validated = false
+				}
+			}
+		}
+		
+		if validated {
+			
+			
+			guard let ssn = ssnTextField.text else {
+				
+				displayAlert(title: "Error", message: "SSN Not Recognized")
+				
+				return nil
+			}
+			
+			guard let dateString = dobTextField.text, let birthDate = Aux.nsDateFrom(string: dateString) else {
+				
+				displayAlert(title: "Error", message: "Birth date couldn't be recognized.")
+				
+				return nil
+			}
+			
+			let fullName = PersonFullName(firstName: firstNameTextField.text, lastName: lastNameTextField.text)
+			
+			var address: Address?
+			
+			do {
+				try address = Address(street: streetTextField.text, city: cityTextField.text, state: stateTextField.text, zip: zipTextField.text)
+				
+			} catch EntrantError.AddressCityMissing(let message) {
+				
+				displayAlert(title: "Error", message: message)
+				
+
+			} catch EntrantError.AddressStateMissing(let message) {
+				displayAlert(title: "Error", message: message)
+				
+
+				
+			}catch EntrantError.AddressStreetMissing(let message){
+				
+				displayAlert(title: "Error", message: message)
+				
+
+			} catch EntrantError.AddressZipMissing(let message) {
+				
+				displayAlert(title: "Error", message: message)
+				
+
+			} catch {
+				
+				fatalError()
+
+			}
+			
+			if let address = address {
+			
+				do {
+					
+					try entrant = HourlyEmployeeCatering(fullName: fullName, address: address, ssn: ssn, birthDate: birthDate)
+					
+				} catch EntrantError.FirstNameMissing(let message) {
+					
+					displayAlert(title: "Error", message: message)
+					
+					
+				} catch EntrantError.LastNameMissing(let message) {
+					
+					displayAlert(title: "Error", message: message)
+					
+				} catch {
+					
+					fatalError()
+				}
+			}
+			
+		}
+		
+		return entrant
+	}
+	
+	func hourlyRide() -> HourlyEmployeeRideService? {
+		var entrant: HourlyEmployeeRideService?
+		return entrant
+	}
+	
+	func hourlyMaintenance() -> HourlyEmployeeMaintenance? {
+		var entrant: HourlyEmployeeMaintenance?
+		return entrant
+	}
+	
+	func manager() -> Manager? {
+		var entrant: Manager?
+		return entrant
+	}
+	
+	func seasonPassGuest() -> SeasonPassGuest? {
+		var entrant: SeasonPassGuest?
+		return entrant
+	}
+	
+	func seniorGuest() -> SeniorGuest? {
+		var entrant: SeniorGuest?
+		return entrant
+	}
+	
+	func contractEmployee() -> ContractEmployee? {
+		var entrant: ContractEmployee?
+		return entrant
+	}
+	
+	func vendor() -> Vendor? {
+		var entrant: Vendor?
+		return entrant
 	}
 	
 	func onSubCatSelected(sender: UIButton!) {
@@ -245,6 +469,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		sender.setTitleColor(UIColor.whiteColor(), forState: .Normal)
 		
 		enableRelevantFields()
+		
+		
 	}
 	
 	//MARK: Auxilliary (Yes, I don't like the word "Helper")
@@ -272,15 +498,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		stateTextField.tag = FVP.fieldTag.state.rawValue
 		zipTextField.tag = FVP.fieldTag.zip.rawValue
 		
-		let nameDobList = [firstNameTextField, lastNameTextField, dobTextField]
+		let nameDobList: [UITextField] = [firstNameTextField, lastNameTextField, dobTextField]
 		
-		var nameAddressDobList = nameDobList
+		var nameAddressDobList: [UITextField] = nameDobList
 		nameAddressDobList += [streetTextField, cityTextField, stateTextField, zipTextField]
 		
 		var stdEmployeeFieldList = nameAddressDobList
 		stdEmployeeFieldList.append(ssnTextField)
 		
-		let fieldsByEntrant: [EntrantSubCategory: [UITextField!]] = [
+		let fieldsByEntrant: [EntrantSubCategory: [UITextField]] = [
 			
 			EntrantSubCategory.classicGuest: [],
 			EntrantSubCategory.contractEmployee: nameAddressDobList,
@@ -364,7 +590,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		
 		for item in entrantStructureItem.subCat {
 			
-			addButtonTo(stack: subCatStackView, text: item.rawValue, tag: tag, bgColor: UIColor.magentaColor(), titleColor: UIColor.grayColor(), action: Selector.childTapped)
+			addButtonTo(stack: subCatStackView, text: item.0.rawValue, tag: tag, bgColor: UIColor.magentaColor(), titleColor: UIColor.grayColor(), action: Selector.childTapped)
 			
 			tag += 1
 		}
@@ -381,9 +607,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	
 	func displayAlert(title title: String, message: String) {
 		
-		let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-		alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-		presentViewController(alert, animated: true, completion: nil)
+		if self.presentedViewController == nil {
+		
+			let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+			alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+			presentViewController(alert, animated: true, completion: nil)
+			
+		}
 	}
 	
 	func disableAllFields() {
@@ -401,9 +631,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		
 		disableAllFields() //just in case
 		
-		let entrantSubCat = entrantStructure[currentParentTag].subCat[currentChildTag]
+		let entrantSubCatTuple = entrantStructure[currentParentTag].subCat[currentChildTag]
 		
-		if let fieldsToEnable = fieldsByEntrant[entrantSubCat] {
+		currentEntrant = entrantSubCatTuple.subCatName//.entrantType
+		
+		if let currentEntrant = currentEntrant, fieldsToEnable = fieldsByEntrant[currentEntrant] {
 			
 			for field in fieldsToEnable {
 				
@@ -432,6 +664,7 @@ struct FieldValidationParameters {
 		let expectedCharCount: Int
 		let mandatoryCharCountMatch: Bool
 		let dataType: fieldDataType
+		let description: String
 	}
 	
 	enum fieldDataType {
@@ -442,15 +675,15 @@ struct FieldValidationParameters {
 	
 	let charCountByTag: [fieldTag: CharCountSpec] = [
 		
-		fieldTag.city: CharCountSpec(expectedCharCount: 15, mandatoryCharCountMatch: false, dataType: .text),
-		fieldTag.company: CharCountSpec(expectedCharCount: 20, mandatoryCharCountMatch: false, dataType: .text),
-		fieldTag.firstName: CharCountSpec(expectedCharCount: 20, mandatoryCharCountMatch: false, dataType: .text),
-		fieldTag.lastName: CharCountSpec(expectedCharCount: 20, mandatoryCharCountMatch: false, dataType: .text),
-		fieldTag.ssn: CharCountSpec(expectedCharCount: 11, mandatoryCharCountMatch: true, dataType: .integer),
-		fieldTag.street: CharCountSpec(expectedCharCount: 100, mandatoryCharCountMatch: false, dataType: .text),
-		fieldTag.state: CharCountSpec(expectedCharCount: 2, mandatoryCharCountMatch: true, dataType: .text),
-		fieldTag.zip: CharCountSpec(expectedCharCount: 5, mandatoryCharCountMatch: true, dataType: .integer),
-		fieldTag.dob: CharCountSpec(expectedCharCount: 10, mandatoryCharCountMatch: true, dataType: .date)
+		fieldTag.city: CharCountSpec(expectedCharCount: 15, mandatoryCharCountMatch: false, dataType: .text, description: "City"),
+		fieldTag.company: CharCountSpec(expectedCharCount: 20, mandatoryCharCountMatch: false, dataType: .text, description: "Company Name"),
+		fieldTag.firstName: CharCountSpec(expectedCharCount: 20, mandatoryCharCountMatch: false, dataType: .text, description: "First Name"),
+		fieldTag.lastName: CharCountSpec(expectedCharCount: 20, mandatoryCharCountMatch: false, dataType: .text, description: "Last Name"),
+		fieldTag.ssn: CharCountSpec(expectedCharCount: 11, mandatoryCharCountMatch: true, dataType: .integer, description: "Social Security Number"),
+		fieldTag.street: CharCountSpec(expectedCharCount: 100, mandatoryCharCountMatch: false, dataType: .text, description: "Street address"),
+		fieldTag.state: CharCountSpec(expectedCharCount: 2, mandatoryCharCountMatch: true, dataType: .text, description: "State"),
+		fieldTag.zip: CharCountSpec(expectedCharCount: 5, mandatoryCharCountMatch: true, dataType: .integer, description: "ZIP-Code"),
+		fieldTag.dob: CharCountSpec(expectedCharCount: 10, mandatoryCharCountMatch: true, dataType: .date, description: "Date of Birth")
 	]
 	
 	func getSpec(tag: Int) -> CharCountSpec? {
@@ -463,7 +696,6 @@ struct FieldValidationParameters {
 		return charCountByTag[ftag]
 	}
 }
-
 
 //https://medium.com/swift-programming/swift-selector-syntax-sugar-81c8a8b10df3#.ywjyftjut
 private extension Selector {

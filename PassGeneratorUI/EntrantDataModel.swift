@@ -37,29 +37,29 @@ struct EntrantCat {
 	
 	let category: EntrantCategory
 	
-	let subCat: [EntrantSubCategory]
+	let subCat: [(subCatName: EntrantSubCategory, entrantType: EntrantType.Type)]
 }
 
 let entrantStructure: [EntrantCat] = [
 
 	EntrantCat(category: .employee, subCat: [
-		.hourlyEmployeeFood,
-		.hourlyEmployeeMaintenance,
-		.hourlyEmployeeRideServices,
-		.contractEmployee]),
+		(.hourlyEmployeeFood, HourlyEmployeeCatering.self),
+		(.hourlyEmployeeMaintenance, HourlyEmployeeMaintenance.self),
+		(.hourlyEmployeeRideServices, HourlyEmployeeRideService.self),
+		(.contractEmployee, ContractEmployee.self)]),
 	
 	EntrantCat(category: .guest, subCat: [
-		.classicGuest,
-		.freeChileGuest,
-		.seasonPassGuest,
-		.vipGuest]),
+		(.classicGuest, ClassicGuest.self),
+		(.freeChileGuest, FreeChildGuest.self),
+		(.seasonPassGuest, SeasonPassGuest.self),
+		(.vipGuest, VipGuest.self)]),
 	
 	EntrantCat(category: .manager, subCat: [
-		.shiftManager,
-		.generalManager,
-		.seniorManager]),
+		(.shiftManager, Manager.self),
+		(.generalManager, Manager.self),
+		(.seniorManager, Manager.self)]),
 	
-	EntrantCat(category: .vendor, subCat: [.vendorRepresentative])
+	EntrantCat(category: .vendor, subCat: [(.vendorRepresentative, Vendor.self)])
 	
 ]
 

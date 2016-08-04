@@ -9,11 +9,17 @@
 import UIKit
 
 class PassViewController: UIViewController {
+	
+	@IBOutlet weak var entrantNameLabel: UILabel!
+	
+	var entrant: EntrantType?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+		
+		entrantNameLabel.text = entrant?.fullName?.firstName
     }
 
     override func didReceiveMemoryWarning() {

@@ -150,4 +150,14 @@ class Auxilliary {
 		return result
 	}
 	
+	class func nsDateFrom(string string: String) -> NSDate? {
+		
+		let dateFormatter = NSDateFormatter()
+		dateFormatter.locale = NSLocale.currentLocale()
+		dateFormatter.dateStyle = .ShortStyle
+		dateFormatter.timeStyle = .NoStyle
+		
+		return dateFormatter.dateFromString(string)
+	}
+	
 }

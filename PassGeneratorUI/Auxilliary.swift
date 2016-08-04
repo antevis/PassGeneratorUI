@@ -135,4 +135,19 @@ class Auxilliary {
 		return button
 	}
 	
+	class func digits() -> NSCharacterSet {
+		
+		return NSCharacterSet.decimalDigitCharacterSet()
+	}
+	
+	class func digitsWith(extraChars extras: String) -> NSCharacterSet {
+		
+		let mutableChars: NSMutableCharacterSet = NSMutableCharacterSet(charactersInString: extras)
+		mutableChars.formUnionWithCharacterSet(digits())
+		
+		let result = mutableChars as NSCharacterSet
+		
+		return result
+	}
+	
 }

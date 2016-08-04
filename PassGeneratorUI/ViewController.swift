@@ -201,31 +201,20 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 			
 			return true
 		}
-		
-		let numbersCharSet = NSCharacterSet.decimalDigitCharacterSet()
-		
-		let dobCharSet: NSMutableCharacterSet = NSMutableCharacterSet(charactersInString: "/.")
-		dobCharSet.formUnionWithCharacterSet(numbersCharSet)
-		
-		
-		let ssnCharSet: NSMutableCharacterSet = NSMutableCharacterSet(charactersInString: "-")
-		ssnCharSet.formUnionWithCharacterSet(numbersCharSet)
-		
-		
-		
+				
 		switch textField.tag {
 			
 			case FVP.fieldTag.zip.rawValue:
 				
-				return string.rangeOfCharacterFromSet(numbersCharSet) != nil
+				return string.rangeOfCharacterFromSet(Aux.digits()) != nil
 			
 			case FVP.fieldTag.ssn.rawValue:
 				
-				return string.rangeOfCharacterFromSet(ssnCharSet) != nil
+				return string.rangeOfCharacterFromSet(Aux.digitsWith(extraChars: "-")) != nil
 			
 			case FVP.fieldTag.dob.rawValue:
 				
-				return string.rangeOfCharacterFromSet(dobCharSet) != nil
+				return string.rangeOfCharacterFromSet(Aux.digitsWith(extraChars: "/.-")) != nil
 				
 			default: return true
 		}

@@ -112,29 +112,6 @@ class Auxilliary {
 		}
 	}
 	
-	
-	class func addButtonTo(stack stackView: UIStackView, text: String, tag: Int, bgColor: UIColor, titleColor: UIColor, action: Selector) {
-		
-		let button = composeButton(text, tag: tag, bgColor: bgColor, titleColor: titleColor, action: action)
-		
-		stackView.addArrangedSubview(button)
-	}
-	
-	class func composeButton(text: String, tag: Int, bgColor: UIColor, titleColor: UIColor, action: Selector) -> UIButton {
-		
-		let button = UIButton()
-		button.backgroundColor = bgColor
-		button.setTitle(text, forState: .Normal)
-		button.setTitleColor(titleColor, forState: .Normal)
-		button.titleLabel?.textAlignment = .Center
-		button.titleLabel?.lineBreakMode = .ByWordWrapping
-		button.addTarget(self, action: action, forControlEvents: .TouchUpInside)
-		
-		button.tag = tag
-		
-		return button
-	}
-	
 	class func digits() -> NSCharacterSet {
 		
 		return NSCharacterSet.decimalDigitCharacterSet()
@@ -159,5 +136,7 @@ class Auxilliary {
 		
 		return dateFormatter.dateFromString(string)
 	}
+	
+	
 	
 }

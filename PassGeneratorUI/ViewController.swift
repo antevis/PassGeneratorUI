@@ -615,11 +615,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 			
 			let spec = FVP().getSpec(textField.tag)
 			
-			message = "\(spec?.description ?? "Value") Shouldn't be empty and exceed \(spec?.expectedCharCount.description ?? "Given threshold of") characters"
+			message = "\(spec?.description ?? "Value") Shouldn't be Empty and Shouldn't exceed \(spec?.expectedCharCount.description ?? "Given threshold of") characters"
 			
 		default:
 			
-			message = "Unable to recognize given value"
+			message = "Unable to Recognize Given Value"
 		}
 		
 		

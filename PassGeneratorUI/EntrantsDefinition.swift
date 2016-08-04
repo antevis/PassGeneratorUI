@@ -138,6 +138,23 @@ enum VendorCompany: String {
 	case orkin = "Orkin"
 	case fedex = "Fedex"
 	case nwElectrical = "NW Electrical"
+	
+	static func allVendorCompanies() -> [VendorCompany] {
+		
+		return [acme, orkin, fedex, nwElectrical]
+	}
+	
+	static func AllVendorCompanyNames() -> [String] {
+		
+		var companies: [String] = []
+		
+		for vendorCompany in allVendorCompanies() {
+			
+			companies.append(vendorCompany.rawValue.lowercaseString) //going case-insensitive for simplicity
+		}
+		
+		return companies
+	}
 }
 
 

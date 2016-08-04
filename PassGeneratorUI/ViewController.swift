@@ -29,7 +29,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	@IBOutlet weak var cityTextField: UITextField!
 	@IBOutlet weak var stateTextField: UITextField!
 	@IBOutlet weak var zipTextField: UITextField!
-	@IBOutlet weak var validateSwitch: UISwitch!
 	
 	var headerButtons: [UIButton] = []
 	
@@ -196,10 +195,42 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		
 	}
 	
-//	func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-//		
-//		return true
-//	}
+	func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+		
+		if string.characters.count == 0 {
+			
+			return true
+		}
+		
+		let numbersCharSet = NSCharacterSet.decimalDigitCharacterSet()
+		
+		let dobCharSet: NSMutableCharacterSet = NSMutableCharacterSet(charactersInString: "/.")
+		dobCharSet.formUnionWithCharacterSet(numbersCharSet)
+		
+		
+		let ssnCharSet: NSMutableCharacterSet = NSMutableCharacterSet(charactersInString: "-")
+		ssnCharSet.formUnionWithCharacterSet(numbersCharSet)
+		
+		
+		
+		switch textField.tag {
+			
+			case FVP.fieldTag.zip.rawValue:
+				
+				return string.rangeOfCharacterFromSet(numbersCharSet) != nil
+			
+			case FVP.fieldTag.ssn.rawValue:
+				
+				return string.rangeOfCharacterFromSet(ssnCharSet) != nil
+			
+			case FVP.fieldTag.dob.rawValue:
+				
+				return string.rangeOfCharacterFromSet(dobCharSet) != nil
+				
+			default: return true
+		}
+		
+	}
 	
 	func dateValid(text: String, len: Int? = nil) -> Bool {
 		
@@ -312,10 +343,10 @@ struct FieldValidationParameters {
 		fieldTag.company: CharCountSpec(expectedCharCount: 20, mandatoryCharCountMatch: false, dataType: .text),
 		fieldTag.firstName: CharCountSpec(expectedCharCount: 20, mandatoryCharCountMatch: false, dataType: .text),
 		fieldTag.lastName: CharCountSpec(expectedCharCount: 20, mandatoryCharCountMatch: false, dataType: .text),
-		fieldTag.ssn: CharCountSpec(expectedCharCount: 9, mandatoryCharCountMatch: true, dataType: .integer),
+		fieldTag.ssn: CharCountSpec(expectedCharCount: 11, mandatoryCharCountMatch: true, dataType: .integer),
 		fieldTag.street: CharCountSpec(expectedCharCount: 100, mandatoryCharCountMatch: false, dataType: .text),
-		fieldTag.state: CharCountSpec(expectedCharCount: 2, mandatoryCharCountMatch: true, dataType: .text)
-		//fieldTag.zip: CharCountSpec(expectedCharCount: 5, mandatoryCharCountMatch: true, dataType: .integer),
+		fieldTag.state: CharCountSpec(expectedCharCount: 2, mandatoryCharCountMatch: true, dataType: .text),
+		fieldTag.zip: CharCountSpec(expectedCharCount: 5, mandatoryCharCountMatch: true, dataType: .integer),
 		//fieldTag.dob: CharCountSpec(expectedCharCount: 10, mandatoryCharCountMatch: true, dataType: .date)
 	]
 	

@@ -36,7 +36,7 @@
                                     <constraint firstAttribute="height" constant="60" id="j66-D0-htm"/>
                                 </constraints>
                             </stackView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="MM / DD / YYYY" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dZb-jq-ARE">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="MM/DD/YYYY" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dZb-jq-ARE">
                                 <rect key="frame" x="28" y="193" width="174" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
@@ -144,10 +144,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dZ9-EU-PkP">
-                                <rect key="frame" x="211" y="747" width="51" height="31"/>
-                            </switch>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Check Text Length" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mwd-8a-g8D">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Check Text Length" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mwd-8a-g8D">
                                 <rect key="frame" x="28" y="752" width="144" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -170,6 +167,11 @@
                             <constraint firstAttribute="trailingMargin" secondItem="gc7-zh-7wj" secondAttribute="trailing" constant="-20" id="gHa-Ts-lY7"/>
                             <constraint firstItem="zf8-dp-vIv" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="nWu-wH-AgI"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="Mwd-8a-g8D"/>
+                            </mask>
+                        </variation>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
                     <connections>
@@ -184,7 +186,6 @@
                         <outlet property="stateTextField" destination="9gq-lz-zXy" id="PEb-fV-Vjv"/>
                         <outlet property="streetTextField" destination="nd8-B5-IvS" id="oiV-hH-gQk"/>
                         <outlet property="subCatStackView" destination="zf8-dp-vIv" id="aIy-3d-oCm"/>
-                        <outlet property="validateSwitch" destination="dZ9-EU-PkP" id="NDq-Ge-1H9"/>
                         <outlet property="zipTextField" destination="Tzj-yv-VyB" id="eIO-Vj-scH"/>
                     </connections>
                 </viewController>

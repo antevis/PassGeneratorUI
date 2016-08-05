@@ -56,7 +56,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	var headerButtons: [UIButton] = []
 	var childButtons: [UIButton] = []
 	
-	var pickerItems: [String] =  []
+	var pickerItems: [(code: String, project: Project)] =  []
 	
 	var fieldsByEntrant: [EntrantSubCategory: [UITextField]] = [:]
 	
@@ -72,8 +72,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		fillParentStack()
 		
 		doHeavyLifting()
-		
-		
 	}
 	
 	override func viewWillAppear(animated: Bool) {
@@ -226,7 +224,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	//MARK: picker conformance
 	func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
 		
-		return pickerItems[row]
+		return pickerItems[row].code
 	}
 	
 	func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
@@ -249,19 +247,35 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		
 		var entrant: EntrantType?
 		
+		var hourlyFood: HourlyEmployeeCatering?
+		var hourlyMaintenance: HourlyEmployeeMaintenance?
+		var hourlyRide: HourlyEmployeeRideService?
+		
 		if let subCat = currentEntrant {
-			
-//			let fieldsToValidate = fieldsByEntrant[subCat]
 			
 			switch subCat {
 				
 				case .classicGuest: entrant = classicGuest()
-				case .contractEmployee: entrant = contractEmployee()
+				
 				case .freeChileGuest: entrant = freeChild()
 				case .generalManager, .shiftManager, .seniorManager: entrant = manager()
-				case .hourlyEmployeeFood: entrant = hourlyFood()
-				case .hourlyEmployeeMaintenance: entrant = hourlyMaintenance()
-				case .hourlyEmployeeRideServices: entrant = hourlyRide()
+				case .hourlyEmployeeFood:
+					
+					//Well, I know this is ugly, but it's a first experience with Generics.
+					hourlyFood = hourly()
+					entrant = hourlyFood
+				
+				case .hourlyEmployeeMaintenance:
+				
+					hourlyMaintenance = hourly()
+					entrant = hourlyMaintenance
+				
+				case .hourlyEmployeeRideServices:
+				
+					hourlyRide = hourly()
+					entrant = hourlyRide
+				
+				case .contractEmployee: entrant = contractEmployee()
 				case .seasonPassGuest: entrant = seasonPassGuest()
 				case .seniorGuest: entrant = seniorGuest()
 				case .vendorRepresentative: entrant = vendor()
@@ -314,44 +328,19 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		return entrant
 	}
 	
-//	func hourly<T: Employee>() -> T? {
-//		
-//		var entrant: T?
-//		
-//		if
-//			let employeeData = getEmployeeRelevantData() {
-//			
-//			do {
-//				
-//				try entrant = T(fullName: employeeData.fullName, address: employeeData.address, ssn: employeeData.ssn, birthDate: employeeData.birthDate)
-//				
-//			} catch EntrantError.FirstNameMissing(let message) {
-//				
-//				displayAlert(title: "Error", message: message)
-//				
-//			} catch EntrantError.LastNameMissing(let message) {
-//				
-//				displayAlert(title: "Error", message: message)
-//				
-//			} catch {
-//				
-//				fatalError()
-//			}
-//		}
-//		
-//		return entrant
-//	}
-	
-	func hourlyFood() -> HourlyEmployeeCatering? {
+	func hourly<T: HourlyEmployee>() -> T? {
 		
-		var entrant: HourlyEmployeeCatering?
+		var entrant: T?
 		
-		if
-			let employeeData = getEmployeeRelevantData() {
+		if let employeeData = getEmployeeRelevantData() {
 			
 			do {
 				
-				try entrant = HourlyEmployeeCatering(fullName: employeeData.fullName, address: employeeData.address, ssn: employeeData.ssn, birthDate: employeeData.birthDate)
+				try entrant = T(
+					fullName: employeeData.dobNameAddress.fullName,
+					address: employeeData.dobNameAddress.address,
+					ssn: employeeData.ssn,
+					birthDate: employeeData.dobNameAddress.birthDate)
 				
 			} catch EntrantError.FirstNameMissing(let message) {
 				
@@ -370,38 +359,139 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		return entrant
 	}
 	
-	func hourlyRide() -> HourlyEmployeeRideService? {
-		var entrant: HourlyEmployeeRideService?
-		return entrant
-	}
-	
-	func hourlyMaintenance() -> HourlyEmployeeMaintenance? {
-		var entrant: HourlyEmployeeMaintenance?
-		return entrant
-	}
-	
 	func manager() -> Manager? {
+		
 		var entrant: Manager?
-		return entrant
-	}
-	
-	func seasonPassGuest() -> SeasonPassGuest? {
-		var entrant: SeasonPassGuest?
-		return entrant
-	}
-	
-	func seniorGuest() -> SeniorGuest? {
-		var entrant: SeniorGuest?
+		
+		if let managerData = getManagerRelevantData() {
+			
+			do {
+				try entrant = Manager(
+					tier: managerData.tier,
+					fullName: managerData.employeeData.dobNameAddress.fullName,
+					address: managerData.employeeData.dobNameAddress.address,
+					ssn: managerData.employeeData.ssn,
+					birthDate: managerData.employeeData.dobNameAddress.birthDate)
+				
+			} catch EntrantError.FirstNameMissing(let message) {
+				
+				displayAlert(title: "Error", message: message)
+				
+			} catch EntrantError.LastNameMissing(let message) {
+				
+				displayAlert(title: "Error", message: message)
+				
+			} catch {
+				
+				fatalError()
+			}
+		}
 		return entrant
 	}
 	
 	func contractEmployee() -> ContractEmployee? {
 		var entrant: ContractEmployee?
+		
+		if let data = getContractorEmployeeRelevantData() {
+			
+			do {
+				try entrant = ContractEmployee(
+					project: data.project,
+					fullName: data.employeeData.dobNameAddress.fullName,
+					address: data.employeeData.dobNameAddress.address,
+					ssn: data.employeeData.ssn,
+					birthDate: data.employeeData.dobNameAddress.birthDate)
+				
+			} catch EntrantError.FirstNameMissing(let message) {
+				
+				displayAlert(title: "Error", message: message)
+				
+			} catch EntrantError.LastNameMissing(let message) {
+				
+				displayAlert(title: "Error", message: message)
+				
+			} catch {
+				
+				fatalError()
+			}
+		}
+		return entrant
+	}
+	
+	func seasonPassGuest() -> SeasonPassGuest? {
+		
+		var entrant: SeasonPassGuest?
+		
+		if let data = getDobNameAddressData() {
+			
+			do {
+				try entrant = SeasonPassGuest(birthDate: data.birthDate, fullName: data.fullName, address: data.address)
+				
+			} catch EntrantError.FirstNameMissing(let message) {
+				
+				displayAlert(title: "Error", message: message)
+				
+			} catch EntrantError.LastNameMissing(let message) {
+				
+				displayAlert(title: "Error", message: message)
+				
+			} catch {
+				
+				fatalError()
+			}
+		}
+		
+		return entrant
+	}
+	
+	func seniorGuest() -> SeniorGuest? {
+		var entrant: SeniorGuest?
+		
+		if let data = getDobNameData() {
+			
+			do {
+				try entrant = SeniorGuest(birthDate: data.birthDate, fullName: data.fullName)
+				
+			} catch EntrantError.FirstNameMissing(let message) {
+				
+				displayAlert(title: "Error", message: message)
+				
+			} catch EntrantError.LastNameMissing(let message) {
+				
+				displayAlert(title: "Error", message: message)
+				
+			} catch {
+				
+				fatalError()
+			}
+		}
+		
 		return entrant
 	}
 	
 	func vendor() -> Vendor? {
 		var entrant: Vendor?
+		
+		if let data = getDobNameData(), let company = getVendorCompany() {
+			
+			do {
+				
+				try entrant = Vendor(company: company, fullName: data.fullName, birthDate: data.birthDate)
+				
+			} catch EntrantError.FirstNameMissing(let message) {
+				
+				displayAlert(title: "Error", message: message)
+				
+			} catch EntrantError.LastNameMissing(let message) {
+				
+				displayAlert(title: "Error", message: message)
+				
+			} catch {
+				
+				fatalError()
+			}
+		}
+		
 		return entrant
 	}
 	
@@ -695,16 +785,25 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	
 	func getEmployeeRelevantData() -> EmployeeRelevantData? {
 		
+		guard let dobNameData = getDobNameAddressData(), let ssn = retrieveStringValueFrom(ssnTextField, subjectName: "SSN") else {
+			
+			return nil
+		}
+		
+		return EmployeeRelevantData(dobNameAddress: dobNameData, ssn: ssn)
+	}
+	
+	func getDobNameAddressData() -> DobNameAddressData? {
+		
 		if
 			let currentEntrant = currentEntrant,
 			let fields = fieldsByEntrant[currentEntrant] where validationPassedFor(fields),
 			let address = retrieveAddress(),
-			let ssn = retrieveStringValueFrom(ssnTextField, subjectName: "SSN"),
 			let birthDate = retrieveDateValueFrom(dobTextField, subjectName: "Birth Date") {
 			
 			let fullName = PersonFullName(firstName: firstNameTextField.text, lastName: lastNameTextField.text)
 			
-			return EmployeeRelevantData(entrantSubCat: currentEntrant, fields: fields, address: address, ssn: ssn, birthDate: birthDate, fullName: fullName)
+			return DobNameAddressData(entrantSubCat: currentEntrant, fields: fields, address: address, birthDate: birthDate, fullName: fullName)
 			
 		} else {
 			
@@ -712,18 +811,110 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		}
 	}
 	
+	func getDobNameData() -> DobNameData? {
+		
+		if
+			let currentEntrant = currentEntrant,
+			let fields = fieldsByEntrant[currentEntrant] where validationPassedFor(fields),
+			let birthDate = retrieveDateValueFrom(dobTextField, subjectName: "Birth Date") {
+			
+			let fullName = PersonFullName(firstName: firstNameTextField.text, lastName: lastNameTextField.text)
+			
+			return DobNameData(entrantSubCat: currentEntrant, fields: fields, birthDate: birthDate, fullName: fullName)
+			
+		} else {
+			
+			return nil
+		}
+	}
+	
+	func getManagerRelevantData() -> ManagerRelevantData? {
+		
+		guard let employeeData = getEmployeeRelevantData(), let tier = getManagerTier() else {
+			
+			return nil
+		}
+		
+		return ManagerRelevantData(employeeData: employeeData, tier: tier)
+	}
+	
+	func getManagerTier() -> ManagementTier? {
+		
+		var tier: ManagementTier?
+		
+		let managerSubCat = entrantStructure[currentParentTag].subCat[currentChildTag].subCatName
+		
+		switch managerSubCat {
+			
+			case .generalManager:
+				tier = ManagementTier.general
+			case .seniorManager:
+				tier = ManagementTier.senior
+			case .shiftManager:
+				tier = ManagementTier.shift
+			default:
+				break
+		}
+		
+		return tier
+	}
+	
+	func getVendorCompany() -> VendorCompany? {
+		
+		guard let companyName = companyTextField.text else {
+			
+			return nil
+		}
+		
+		return VendorCompany(rawValue: companyName)
+	}
+	
+	func getContractorEmployeeRelevantData() -> ContractorEmployeeRelevantData? {
+		
+		guard let employeeData = getEmployeeRelevantData() else {
+			
+			return nil
+		}
+		
+		let currentProject = pickerItems[projectPicker.selectedRowInComponent(0)].project
+		
+		return ContractorEmployeeRelevantData(employeeData: employeeData, project: currentProject)
+	}
 	
 }
 
 struct EmployeeRelevantData {
 	
+	let dobNameAddress: DobNameAddressData
+	let ssn: String
+}
+
+struct ManagerRelevantData {
+	
+	let employeeData: EmployeeRelevantData
+	let tier: ManagementTier
+}
+
+struct ContractorEmployeeRelevantData {
+	let employeeData: EmployeeRelevantData
+	let project: Project
+}
+
+struct DobNameAddressData {
+	
 	let entrantSubCat: EntrantSubCategory
 	let fields: [UITextField]
 	let address: Address
-	let ssn: String
 	let birthDate: NSDate
 	let fullName: PersonFullName
+}
+
+struct DobNameData {
 	
+	let entrantSubCat: EntrantSubCategory
+	let fields: [UITextField]
+	let birthDate: NSDate
+	let fullName: PersonFullName
 }
 
 struct FieldValidationParameters {

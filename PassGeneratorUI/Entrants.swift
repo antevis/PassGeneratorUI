@@ -48,7 +48,17 @@ class SeasonPassGuest: Guest, DiscountClaimant, AddressProvider {
 	let discounts: [DiscountParams]
 	let address: Address
 	
-	init(birthDate: NSDate, fullName: PersonFullName, address: Address) {
+	init(birthDate: NSDate, fullName: PersonFullName, address: Address) throws {
+		
+		guard fullName.firstName != nil else {
+			
+			throw EntrantError.FirstNameMissing(message: "*********ERROR*********\rFirst Name Missing\r*********ERROR*********\n")
+		}
+		
+		guard fullName.lastName != nil else {
+			
+			throw EntrantError.LastNameMissing(message: "*********ERROR*********\rLast Name Missing\r*********ERROR*********\n")
+		}
 		
 		let accessRules = RideAccess(unlimitedAccess: true, skipLines: true, seeEntrantAccessRules: false)
 		
@@ -78,7 +88,17 @@ class SeniorGuest: Guest, DiscountClaimant {
 	
 	let discounts: [DiscountParams]
 	
-	init(birthDate: NSDate, fullName: PersonFullName) {
+	init(birthDate: NSDate, fullName: PersonFullName) throws {
+		
+		guard fullName.firstName != nil else {
+			
+			throw EntrantError.FirstNameMissing(message: "*********ERROR*********\rFirst Name Missing\r*********ERROR*********\n")
+		}
+		
+		guard fullName.lastName != nil else {
+			
+			throw EntrantError.LastNameMissing(message: "*********ERROR*********\rLast Name Missing\r*********ERROR*********\n")
+		}
 		
 		let description: String = "Senior Guest"
 		
@@ -114,11 +134,33 @@ class FreeChildGuest: ClassicGuest {
 	}
 }
 
-
-
-class HourlyEmployeeCatering: Employee {
+class HourlyEmployee: Employee {
 	
-	convenience init(fullName: PersonFullName, address: Address, ssn: String, birthDate: NSDate) throws {
+	convenience required init(fullName: PersonFullName, address: Address, ssn: String, birthDate: NSDate) throws {
+		
+		//let accessibleAreas: [Area] = [.amusement, .kitchen]
+		
+		try self.init(accessibleAreas: [], fullName: fullName, address: address, ssn: ssn, birthDate: birthDate, description: "Hourly Employee Food Services")
+	}
+	
+	convenience init(accessibleAreas: [Area], fullName: PersonFullName, address: Address, ssn: String, birthDate: NSDate, description: String) throws {
+		
+		let accessRules = RideAccess(unlimitedAccess: true, skipLines: false, seeEntrantAccessRules: false)
+		
+		let discounts: [DiscountParams] = [
+			
+			DiscountParams(subject: .food, discountValue: 15),
+			DiscountParams(subject: .merchandise, discountValue: 25)
+		]
+		
+		
+		try self.init(accessibleAreas: accessibleAreas, accessRules: accessRules, discounts: discounts,fullName: fullName, address: address, ssn: ssn, birthDate: birthDate, description: description)
+	}
+}
+
+class HourlyEmployeeCatering: HourlyEmployee {
+	
+	convenience required init(fullName: PersonFullName, address: Address, ssn: String, birthDate: NSDate) throws {
 		
 		let accessibleAreas: [Area] = [.amusement, .kitchen]
 		
@@ -126,9 +168,9 @@ class HourlyEmployeeCatering: Employee {
 	}
 }
 
-class HourlyEmployeeRideService: Employee {
+class HourlyEmployeeRideService: HourlyEmployee {
 	
-	convenience init(fullName: PersonFullName, address: Address, ssn: String, birthDate: NSDate) throws {
+	convenience required init(fullName: PersonFullName, address: Address, ssn: String, birthDate: NSDate) throws {
 		
 		let accessibleAreas: [Area] = [.amusement, .rideControl]
 		
@@ -136,9 +178,9 @@ class HourlyEmployeeRideService: Employee {
 	}
 }
 
-class HourlyEmployeeMaintenance: Employee {
+class HourlyEmployeeMaintenance: HourlyEmployee {
 	
-	convenience init(fullName: PersonFullName, address: Address, ssn: String, birthDate: NSDate) throws {
+	convenience required init(fullName: PersonFullName, address: Address, ssn: String, birthDate: NSDate) throws {
 		
 		let accessibleAreas: [Area] = [.amusement, .kitchen, .rideControl, .maintenance]
 		

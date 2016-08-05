@@ -119,13 +119,13 @@ enum Project: String {
 		return [oneOne, oneTwo, oneThree, twoOne, twoTwo]
 	}
 	
-	static func allProjectNumbers() -> [String] {
+	static func allProjectNumbers() -> [(code: String, project: Project)] {
 		
-		var projectNumbers: [String] = []
+		var projectNumbers: [(code: String, project: Project)] = []
 		
 		for project in allProjects() {
 			
-			projectNumbers.append(project.rawValue)
+			projectNumbers.append((project.rawValue, project))
 		}
 		
 		return projectNumbers

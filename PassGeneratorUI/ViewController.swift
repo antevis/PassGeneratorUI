@@ -314,78 +314,56 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		return entrant
 	}
 	
+//	func hourly<T: Employee>() -> T? {
+//		
+//		var entrant: T?
+//		
+//		if
+//			let employeeData = getEmployeeRelevantData() {
+//			
+//			do {
+//				
+//				try entrant = T(fullName: employeeData.fullName, address: employeeData.address, ssn: employeeData.ssn, birthDate: employeeData.birthDate)
+//				
+//			} catch EntrantError.FirstNameMissing(let message) {
+//				
+//				displayAlert(title: "Error", message: message)
+//				
+//			} catch EntrantError.LastNameMissing(let message) {
+//				
+//				displayAlert(title: "Error", message: message)
+//				
+//			} catch {
+//				
+//				fatalError()
+//			}
+//		}
+//		
+//		return entrant
+//	}
+	
 	func hourlyFood() -> HourlyEmployeeCatering? {
 		
 		var entrant: HourlyEmployeeCatering?
 		
-		if let currentEntrant = currentEntrant, let fields = fieldsByEntrant[currentEntrant] where validationPassedFor(fields) {
-			
-			guard let ssn = ssnTextField.text else {
-				
-				displayAlert(title: "Error", message: "SSN Not Recognized")
-				
-				return nil
-			}
-			
-			guard let dateString = dobTextField.text, let birthDate = Aux.nsDateFrom(string: dateString) else {
-				
-				displayAlert(title: "Error", message: "Birth date couldn't be recognized.")
-				
-				return nil
-			}
-			
-			let fullName = PersonFullName(firstName: firstNameTextField.text, lastName: lastNameTextField.text)
-			
-			var address: Address?
+		if
+			let employeeData = getEmployeeRelevantData() {
 			
 			do {
-				try address = Address(street: streetTextField.text, city: cityTextField.text, state: stateTextField.text, zip: zipTextField.text)
 				
-			} catch EntrantError.AddressCityMissing(let message) {
+				try entrant = HourlyEmployeeCatering(fullName: employeeData.fullName, address: employeeData.address, ssn: employeeData.ssn, birthDate: employeeData.birthDate)
 				
-				displayAlert(title: "Error", message: message)
-				
-				
-			} catch EntrantError.AddressStateMissing(let message) {
-				displayAlert(title: "Error", message: message)
-				
-				
-				
-			}catch EntrantError.AddressStreetMissing(let message){
+			} catch EntrantError.FirstNameMissing(let message) {
 				
 				displayAlert(title: "Error", message: message)
 				
-				
-			} catch EntrantError.AddressZipMissing(let message) {
+			} catch EntrantError.LastNameMissing(let message) {
 				
 				displayAlert(title: "Error", message: message)
-				
 				
 			} catch {
 				
 				fatalError()
-				
-			}
-			
-			if let address = address {
-				
-				do {
-					
-					try entrant = HourlyEmployeeCatering(fullName: fullName, address: address, ssn: ssn, birthDate: birthDate)
-					
-				} catch EntrantError.FirstNameMissing(let message) {
-					
-					displayAlert(title: "Error", message: message)
-					
-					
-				} catch EntrantError.LastNameMissing(let message) {
-					
-					displayAlert(title: "Error", message: message)
-					
-				} catch {
-					
-					fatalError()
-				}
 			}
 		}
 		
@@ -442,8 +420,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		sender.setTitleColor(UIColor.whiteColor(), forState: .Normal)
 		
 		enableRelevantFields()
-		
-		
 	}
 	
 	//MARK: Auxilliary (Yes, I don't like the word "Helper")
@@ -622,7 +598,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 			message = "Unable to Recognize Given Value"
 		}
 		
-		
 		displayAlert(title: "Error", message: message)
 	}
 	
@@ -653,6 +628,102 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 			}
 		}
 	}
+	
+	func retrieveAddress() -> Address? {
+		
+		var address: Address?
+		
+		do {
+			try address = Address(street: streetTextField.text, city: cityTextField.text, state: stateTextField.text, zip: zipTextField.text)
+			
+		} catch EntrantError.AddressCityMissing(let message) {
+			
+			displayAlert(title: "Error", message: message)
+			
+			
+		} catch EntrantError.AddressStateMissing(let message) {
+			displayAlert(title: "Error", message: message)
+			
+			
+			
+		}catch EntrantError.AddressStreetMissing(let message){
+			
+			displayAlert(title: "Error", message: message)
+			
+			
+		} catch EntrantError.AddressZipMissing(let message) {
+			
+			displayAlert(title: "Error", message: message)
+			
+			
+		} catch {
+			
+			fatalError()
+			
+		}
+		
+		return address
+	}
+	
+	func retrieveStringValueFrom(textField: UITextField, subjectName: String) -> String? {
+		
+		if let candidate = textField.text {
+			
+			return candidate
+			
+		} else {
+			
+			displayAlert(title: "Error", message: "\(subjectName) Not Recognized")
+			
+			return nil
+		}
+	}
+	
+	func retrieveDateValueFrom(textField: UITextField, subjectName: String) -> NSDate? {
+		
+		if let dateString = textField.text, let date = Aux.nsDateFrom(string: dateString) {
+			
+			return date
+			
+		} else {
+			
+			displayAlert(title: "Error", message: "\(subjectName) Not Recognized")
+			
+			return nil
+		}
+	}
+	
+	func getEmployeeRelevantData() -> EmployeeRelevantData? {
+		
+		if
+			let currentEntrant = currentEntrant,
+			let fields = fieldsByEntrant[currentEntrant] where validationPassedFor(fields),
+			let address = retrieveAddress(),
+			let ssn = retrieveStringValueFrom(ssnTextField, subjectName: "SSN"),
+			let birthDate = retrieveDateValueFrom(dobTextField, subjectName: "Birth Date") {
+			
+			let fullName = PersonFullName(firstName: firstNameTextField.text, lastName: lastNameTextField.text)
+			
+			return EmployeeRelevantData(entrantSubCat: currentEntrant, fields: fields, address: address, ssn: ssn, birthDate: birthDate, fullName: fullName)
+			
+		} else {
+			
+			return nil
+		}
+	}
+	
+	
+}
+
+struct EmployeeRelevantData {
+	
+	let entrantSubCat: EntrantSubCategory
+	let fields: [UITextField]
+	let address: Address
+	let ssn: String
+	let birthDate: NSDate
+	let fullName: PersonFullName
+	
 }
 
 struct FieldValidationParameters {

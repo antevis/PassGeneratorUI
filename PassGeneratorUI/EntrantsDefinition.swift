@@ -150,7 +150,7 @@ enum VendorCompany: String {
 		
 		for vendorCompany in allVendorCompanies() {
 			
-			companies.append(vendorCompany.rawValue.lowercaseString) //going case-insensitive for simplicity
+			companies.append(vendorCompany.rawValue)
 		}
 		
 		return companies

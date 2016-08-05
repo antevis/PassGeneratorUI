@@ -142,7 +142,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	
 	func vendorCompanyValid(value: String, len: Int?) -> Bool {
 		
-		return VendorCompany.AllVendorCompanyNames().contains(value.lowercaseString) //going case-insensitive for simplicity
+		return VendorCompany.AllVendorCompanyNames().contains(value) 
 	}
 	
 	//https://github.com/jpotts18/SwiftValidator/blob/master/SwiftValidator/Rules/RegexRule.swift
@@ -545,6 +545,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		var stdEmployeeFieldList = nameAddressDobList
 		stdEmployeeFieldList.append(ssnTextField)
 		
+		var vendorList = nameDobList
+		vendorList.append(companyTextField)
+		
 		let fieldsByEntrant: [EntrantSubCategory: [UITextField]] = [
 			
 			EntrantSubCategory.classicGuest: [],
@@ -558,7 +561,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 			EntrantSubCategory.seniorGuest: nameDobList,
 			EntrantSubCategory.seniorManager: stdEmployeeFieldList,
 			EntrantSubCategory.shiftManager: stdEmployeeFieldList,
-			EntrantSubCategory.vendorRepresentative: nameDobList
+			EntrantSubCategory.vendorRepresentative: vendorList
 		]
 		
 		self.fieldsByEntrant = fieldsByEntrant
@@ -635,6 +638,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		}
 		
 		disableAllFields()
+		
+		//MARK: toggle [0]-th child button .touchUpInside
+		currentChildTag = 0
+		if let button = subCatStackView.subviews[currentChildTag] as? UIButton {
+			
+			button.sendActionsForControlEvents(.TouchUpInside)
+		}
+		
+		
 	}
 	
 	func addButtonTo(stack stackView: UIStackView, text: String, tag: Int, bgColor: UIColor, titleColor: UIColor, action: Selector) {

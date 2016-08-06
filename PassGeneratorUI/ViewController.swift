@@ -111,114 +111,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		
 	}
 	
-	func dateValid(text: String, len: Int? = nil) -> Bool {
-		
-		return Aux.nsDateFrom(string: text) != nil
-	}
 	
-	func ssnValid(value: String, len: Int? = nil) -> Bool {
-		
-		let regex = "^\\d{3}-\\d{2}-\\d{4}$"
-		
-		return valid(value, against: regex)
-	}
-	
-	func zipValid(value: String, len: Int? = nil) -> Bool {
-		
-		let regex = "\\d{5}"
-		
-		return valid(value, against: regex)
-	}
-	
-	func lengthValid(value: String, len: Int?) -> Bool {
-		
-		guard let len = len else {
-			
-			return false
-		}
-		
-		return value.characters.count <= len && value.characters.count > 0
-	}
-	
-	func vendorCompanyValid(value: String, len: Int?) -> Bool {
-		
-		return VendorCompany.AllVendorCompanyNames().contains(value) 
-	}
-	
-	//https://github.com/jpotts18/SwiftValidator/blob/master/SwiftValidator/Rules/RegexRule.swift
-	func valid(value: String, against regex: String) -> Bool {
-		
-		let test = NSPredicate(format: "SELF MATCHES %@", regex)
-		return test.evaluateWithObject(value)
-	}
-	
-	func validationPassedFor(fields: [UITextField]) -> Bool {
-		
-		for field in fields {
-			
-			if !valueValidationPassedFor(field, restrict: true) {
-				
-				displayAlertRespectiveTo(field)
-				
-				return false
-			}
-		}
-		
-		return true
-	}
-	
-	func valueValidationPassedFor(textField: UITextField, restrict: Bool = false) -> Bool {
-		
-		var validationFunction: (validatedText: String, len: Int?) -> Bool
-		
-		var len: Int?
-		
-		switch textField.tag {
-			
-		case FVP.fieldTag.dob.rawValue:
-			
-			validationFunction = dateValid
-			
-		case FVP.fieldTag.ssn.rawValue:
-			
-			validationFunction = ssnValid
-			
-		case FVP.fieldTag.zip.rawValue:
-			
-			validationFunction = zipValid
-			
-		case FVP.fieldTag.company.rawValue:
-			
-			validationFunction = vendorCompanyValid
-			
-		case FVP.fieldTag.city.rawValue, FVP.fieldTag.firstName.rawValue, FVP.fieldTag.lastName.rawValue, FVP.fieldTag.state.rawValue, FVP.fieldTag.street.rawValue:
-			
-			validationFunction = lengthValid
-			len = FVP().getSpec(textField.tag)?.expectedCharCount
-			
-		default:
-			
-			return true
-		}
-		
-		if let candidate = textField.text where validationFunction(validatedText: candidate, len: len) {
-			
-			textField.backgroundColor = nil //default transparent
-			
-		} else {
-			
-			textField.backgroundColor = UIColor(red: 1, green: 123/255.0, blue: 162/255.0, alpha: 1) //pink
-			
-			if restrict {
-				
-				displayAlertRespectiveTo(textField)
-				
-				return false
-			}
-		}
-		
-		return true
-	}
 	
 	
 	//MARK: picker conformance
@@ -242,7 +135,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		print(pickerItems[row])
 	}
 	
-	//MARK: Events
+	//MARK: Events Handlers
 	@IBAction func generatePassButtonTapped(sender: AnyObject) {
 		
 		var entrant: EntrantType?
@@ -261,7 +154,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 				case .generalManager, .shiftManager, .seniorManager: entrant = manager()
 				case .hourlyEmployeeFood:
 					
-					//Well, I know this is ugly, but it's a first experience with Generics.
+					//A little ugly, but works fine. And utilizes Generics
 					hourlyFood = hourly()
 					entrant = hourlyFood
 				
@@ -291,6 +184,73 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		}
 	}
 	
+	func fillParentStack() {
+		
+		var tag: Int = 0
+		
+		for item in entrantStructure {
+			
+			let button = composeButton(buttonText: item.category.rawValue, tag: tag, bgColor: UIColor.blueColor(), titleColor: UIColor.grayColor(), action: .parentTapped)
+			
+			headerStackView.addArrangedSubview(button)
+			
+			headerButtons.append(button)
+			
+			tag += 1
+		}
+	}
+	
+	func fillChildStack(sender: UIButton!){
+		
+		self.currentParentTag = sender.tag
+		
+		for button in headerButtons {
+			
+			button.setTitleColor(UIColor.grayColor(), forState: .Normal)
+		}
+		
+		sender.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+		
+		Aux.removeButtonsFrom(subCatStackView)
+		
+		let entrantStructureItem: EntrantCat = entrantStructure[sender.tag]
+		
+		var tag: Int = 0
+		
+		for item in entrantStructureItem.subCat {
+			
+			addButtonTo(stack: subCatStackView, text: item.0.rawValue, tag: tag, bgColor: UIColor.magentaColor(), titleColor: UIColor.grayColor(), action: Selector.childTapped)
+			
+			tag += 1
+		}
+		
+		disableAllFields()
+		
+		currentChildTag = 0
+		if let button = subCatStackView.subviews[currentChildTag] as? UIButton {
+			
+			button.sendActionsForControlEvents(.TouchUpInside)
+		}
+	}
+	
+	func onSubCatSelected(sender: UIButton!) {
+		
+		self.currentChildTag = sender.tag
+		
+		for subView in subCatStackView.subviews {
+			
+			if let button = subView as? UIButton {
+				
+				button.setTitleColor(UIColor.grayColor(), forState: .Normal)
+			}
+		}
+		
+		sender.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+		
+		enableRelevantFields()
+	}
+	
+	//MARK: entrants initialization
 	func classicGuest() -> ClassicGuest? {
 		
 		return ClassicGuest()
@@ -495,24 +455,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		return entrant
 	}
 	
-	func onSubCatSelected(sender: UIButton!) {
-		
-		self.currentChildTag = sender.tag
-		
-		for subView in subCatStackView.subviews {
-			
-			if let button = subView as? UIButton {
-				
-				button.setTitleColor(UIColor.grayColor(), forState: .Normal)
-			}
-		}
-		
-		sender.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-		
-		enableRelevantFields()
-	}
-	
-	//MARK: Auxilliary (Yes, I don't like the word "Helper")
+	//MARK: Auxilliary (I don't like the word "Helper")
 	func doHeavyLifting() {
 		
 		dobTextField.delegate = self
@@ -597,57 +540,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		return button
 	}
 	
-	func fillParentStack() {
-		
-		var tag: Int = 0
-		
-		for item in entrantStructure {
-			
-			let button = composeButton(buttonText: item.category.rawValue, tag: tag, bgColor: UIColor.blueColor(), titleColor: UIColor.grayColor(), action: .parentTapped)
-			
-			headerStackView.addArrangedSubview(button)
-			
-			headerButtons.append(button)
-			
-			tag += 1
-		}
-	}
 	
-	func fillChildStack(sender: UIButton!){
-		
-		self.currentParentTag = sender.tag
-		
-		for button in headerButtons {
-			
-			button.setTitleColor(UIColor.grayColor(), forState: .Normal)
-		}
-		
-		sender.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-		
-		Aux.removeButtonsFrom(subCatStackView)
-		
-		let entrantStructureItem: EntrantCat = entrantStructure[sender.tag]
-		
-		var tag: Int = 0
-		
-		for item in entrantStructureItem.subCat {
-			
-			addButtonTo(stack: subCatStackView, text: item.0.rawValue, tag: tag, bgColor: UIColor.magentaColor(), titleColor: UIColor.grayColor(), action: Selector.childTapped)
-			
-			tag += 1
-		}
-		
-		disableAllFields()
-		
-		//MARK: toggle [0]-th child button .touchUpInside
-		currentChildTag = 0
-		if let button = subCatStackView.subviews[currentChildTag] as? UIButton {
-			
-			button.sendActionsForControlEvents(.TouchUpInside)
-		}
-		
-		
-	}
 	
 	func addButtonTo(stack stackView: UIStackView, text: String, tag: Int, bgColor: UIColor, titleColor: UIColor, action: Selector) {
 		
@@ -891,6 +784,76 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		let currentProject = pickerItems[projectPicker.selectedRowInComponent(0)].project
 		
 		return ContractorEmployeeRelevantData(employeeData: employeeData, project: currentProject)
+	}
+	
+	func validationPassedFor(fields: [UITextField]) -> Bool {
+		
+		for field in fields {
+			
+			if !valueValidationPassedFor(field, restrict: true) {
+				
+				displayAlertRespectiveTo(field)
+				
+				return false
+			}
+		}
+		
+		return true
+	}
+	
+	//Function used in textFieldShouldEndEditing(textField: UITextField) for UITextFieldDelegate conformance as non-restrictive but informative,
+	//and later for final validation with the 'restrict' paramenter explicitly set to true
+	func valueValidationPassedFor(textField: UITextField, restrict: Bool = false) -> Bool {
+		
+		var validationFunction: (validatedText: String, len: Int?) -> Bool
+		
+		var len: Int?
+		
+		switch textField.tag {
+			
+		case FVP.fieldTag.dob.rawValue:
+			
+			validationFunction = Aux.dateValid
+			
+		case FVP.fieldTag.ssn.rawValue:
+			
+			validationFunction = Aux.ssnValid
+			
+		case FVP.fieldTag.zip.rawValue:
+			
+			validationFunction = Aux.zipValid
+			
+		case FVP.fieldTag.company.rawValue:
+			
+			validationFunction = Aux.vendorCompanyValid
+			
+		case FVP.fieldTag.city.rawValue, FVP.fieldTag.firstName.rawValue, FVP.fieldTag.lastName.rawValue, FVP.fieldTag.state.rawValue, FVP.fieldTag.street.rawValue:
+			
+			validationFunction = Aux.lengthValid
+			len = FVP().getSpec(textField.tag)?.expectedCharCount
+			
+		default:
+			
+			return true
+		}
+		
+		if let candidate = textField.text where validationFunction(validatedText: candidate, len: len) {
+			
+			textField.backgroundColor = nil //default transparent
+			
+		} else {
+			
+			textField.backgroundColor = UIColor(red: 1, green: 123/255.0, blue: 162/255.0, alpha: 1) //pink
+			
+			if restrict {
+				
+				displayAlertRespectiveTo(textField)
+				
+				return false
+			}
+		}
+		
+		return true
 	}
 	
 }

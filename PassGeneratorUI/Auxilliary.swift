@@ -138,5 +138,46 @@ class Auxilliary {
 	}
 	
 	
+	class func dateValid(text: String, len: Int? = nil) -> Bool {
+		
+		return Aux.nsDateFrom(string: text) != nil
+	}
+	
+	class func ssnValid(value: String, len: Int? = nil) -> Bool {
+		
+		let regex = "^\\d{3}-\\d{2}-\\d{4}$"
+		
+		return valid(value, against: regex)
+	}
+	
+	class func zipValid(value: String, len: Int? = nil) -> Bool {
+		
+		let regex = "\\d{5}"
+		
+		return valid(value, against: regex)
+	}
+	
+	class func lengthValid(value: String, len: Int?) -> Bool {
+		
+		guard let len = len else {
+			
+			return false
+		}
+		
+		return value.characters.count <= len && value.characters.count > 0
+	}
+	
+	class func vendorCompanyValid(value: String, len: Int?) -> Bool {
+		
+		return VendorCompany.AllVendorCompanyNames().contains(value)
+	}
+	
+	//https://github.com/jpotts18/SwiftValidator/blob/master/SwiftValidator/Rules/RegexRule.swift
+	class func valid(value: String, against regex: String) -> Bool {
+		
+		let test = NSPredicate(format: "SELF MATCHES %@", regex)
+		return test.evaluateWithObject(value)
+	}
+	
 	
 }

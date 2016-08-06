@@ -52,7 +52,8 @@ let entrantStructure: [EntrantCat] = [
 		(.classicGuest, ClassicGuest.self),
 		(.freeChileGuest, FreeChildGuest.self),
 		(.seasonPassGuest, SeasonPassGuest.self),
-		(.vipGuest, VipGuest.self)]),
+		(.vipGuest, VipGuest.self),
+		(.seniorGuest, SeniorGuest.self)]),
 	
 	EntrantCat(category: .manager, subCat: [
 		(.shiftManager, Manager.self),

@@ -184,6 +184,24 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		}
 	}
 	
+	@IBAction func populateDataTapped(sender: AnyObject) {
+		
+		firstNameTextField.text = "Qwertyuiopasdfghjklz"
+		lastNameTextField.text = "Zlkjhgfdsapoiuytrewq"
+		
+		//OMFG. Really?
+		
+		let date = Aux.todayBirthday(year: 1993)!
+		
+		dobTextField.text = "\(Aux.dayAsStringFrom(date)).\(Aux.monthAsStringFrom(date)).\(Aux.yearAsStringFrom(date))"
+		
+		ssnTextField.text = "555-55-5555"
+		companyTextField.text = "Fedex"
+		streetTextField.text = "Elm str. 1"
+		cityTextField.text = "San Francisco"
+		stateTextField.text = "CA"
+		zipTextField.text = "99999"
+	}
 	func fillParentStack() {
 		
 		var tag: Int = 0

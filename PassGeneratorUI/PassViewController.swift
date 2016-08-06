@@ -11,6 +11,10 @@ import UIKit
 class PassViewController: UIViewController {
 	
 	@IBOutlet weak var entrantNameLabel: UILabel!
+	@IBOutlet weak var passDescriptionLabel: UILabel!
+	@IBOutlet weak var rideAccessLabel: UILabel!
+	@IBOutlet weak var foodDiscountLabel: UILabel!
+	@IBOutlet weak var merchDiscountLabel: UILabel!
 	
 	var entrant: EntrantType?
 
@@ -19,13 +23,44 @@ class PassViewController: UIViewController {
 
         // Do any additional setup after loading the view.
 		
-		entrantNameLabel.text = entrant?.fullName?.firstName
+		if let entrant = entrant {
+		
+			entrantNameLabel.text = "\(entrant.fullName?.firstName ?? "") \(entrant.fullName?.lastName ?? "")"
+			passDescriptionLabel.text = entrant.description
+			
+			rideAccessLabel.text = entrant.accessRules.permissions()
+			
+			if let discountclaimantEntrant = entrant as? DiscountClaimant {
+				
+				let discounts = discountclaimantEntrant.discounts
+				
+				if discounts.count > 0 {
+					
+					foodDiscountLabel.text = "\(Int(discounts[0].discountValue))% Food Discount"
+					merchDiscountLabel.text = "\(Int(discounts[1].discountValue))% Merch Discount"
+				}
+			} else {
+				
+				foodDiscountLabel.text = " "
+				merchDiscountLabel.text = " "
+			}
+		}
+		
+		
+		
+		
+		
+		
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+	
+	override func preferredStatusBarStyle() -> UIStatusBarStyle {
+		return UIStatusBarStyle.LightContent
+	}
     
 
 	@IBAction func createNewPass(sender: AnyObject) {

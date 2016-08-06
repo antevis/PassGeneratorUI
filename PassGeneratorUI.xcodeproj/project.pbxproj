@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C7DB5361D55AF5E00CA4FA9 /* FaceImageAsset.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C7DB5351D55AF5E00CA4FA9 /* FaceImageAsset.png */; };
 		2CEE84A31D52497400E0D4D8 /* PassViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEE84A21D52497400E0D4D8 /* PassViewController.swift */; };
 		2CF481BB1D49CB4800E87533 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF481BA1D49CB4800E87533 /* AppDelegate.swift */; };
 		2CF481BD1D49CB4800E87533 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF481BC1D49CB4800E87533 /* ViewController.swift */; };
@@ -24,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2C7DB5351D55AF5E00CA4FA9 /* FaceImageAsset.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FaceImageAsset.png; sourceTree = "<group>"; };
 		2CEE84A21D52497400E0D4D8 /* PassViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PassViewController.swift; sourceTree = "<group>"; };
 		2CF481B71D49CB4700E87533 /* PassGeneratorUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PassGeneratorUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CF481BA1D49CB4800E87533 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -72,6 +74,7 @@
 		2CF481B91D49CB4800E87533 /* PassGeneratorUI */ = {
 			isa = PBXGroup;
 			children = (
+				2C7DB5351D55AF5E00CA4FA9 /* FaceImageAsset.png */,
 				2CF481D61D49CBB600E87533 /* AccessDenied.wav */,
 				2CF481D71D49CBB600E87533 /* AccessGranted.wav */,
 				2CF481CC1D49CB9D00E87533 /* AudioServices.swift */,
@@ -154,6 +157,7 @@
 				2CF481C21D49CB4800E87533 /* Assets.xcassets in Resources */,
 				2CF481C01D49CB4800E87533 /* Main.storyboard in Resources */,
 				2CF481D81D49CBB600E87533 /* AccessDenied.wav in Resources */,
+				2C7DB5361D55AF5E00CA4FA9 /* FaceImageAsset.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

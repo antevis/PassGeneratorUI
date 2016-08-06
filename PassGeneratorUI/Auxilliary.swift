@@ -72,6 +72,30 @@ class Auxilliary {
 		return calendar.dateFromComponents(dateComponents)
 	}
 	
+	class func yearAsStringFrom(date: NSDate) -> String {
+		
+		let calendar = NSCalendar.currentCalendar()
+		let components = calendar.components([.Day , .Month , .Year], fromDate: date)
+		
+		return  components.year.description
+	}
+	
+	class func monthAsStringFrom(date: NSDate) -> String {
+		
+		let calendar = NSCalendar.currentCalendar()
+		let components = calendar.components([.Day , .Month , .Year], fromDate: date)
+		
+		return  components.month.description
+	}
+	
+	class func dayAsStringFrom(date: NSDate) -> String {
+		
+		let calendar = NSCalendar.currentCalendar()
+		let components = calendar.components([.Day , .Month , .Year], fromDate: date)
+		
+		return  components.day.description
+	}
+	
 	class func year() -> Int {
 		
 		let comps = NSCalendar.currentCalendar().components([.Year], fromDate: NSDate())

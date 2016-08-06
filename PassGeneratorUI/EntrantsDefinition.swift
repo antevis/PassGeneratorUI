@@ -200,6 +200,38 @@ struct RideAccess {
 		
 		return (parameter, message)
 	}
+	
+	func permissions() -> String {
+		
+		var desc: String = ""
+		
+		desc = addDescriptionTo(desc, basedOn: self.unlimitedAccess, additionText: "Unlimited Rides", marker: "•")
+		desc = addDescriptionTo(desc, basedOn: self.skipLines, additionText: "Can Skip Lines", marker: "•")
+		desc = addDescriptionTo(desc, basedOn: self.seeEntrantAccessRules, additionText: "Can See Entrant Rules", marker: "•")
+		
+		return desc
+	}
+	
+	func addDescriptionTo(text: String, basedOn condition: Bool, additionText: String, marker: String) -> String {
+		
+		var result: String = text
+		
+		if condition {
+			
+			if text.characters.count > 0 {
+				
+				result += ", "
+				
+			} else {
+				
+				result += "\(marker) "
+			}
+			
+			result += additionText
+		}
+		
+		return result
+	}
 }
 
 

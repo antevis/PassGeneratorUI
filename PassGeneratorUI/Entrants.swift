@@ -263,7 +263,7 @@ class Vendor: VendorType, EntrantType, FullNameProvider, BirthdayProvider {
 			dateString = "Never"
 		}
 		
-		self.description = "Vendor representative of: \(company.rawValue), Visit date: \(dateString)"
+		self.description = "Vendor: \(company.rawValue), Visit date: \(dateString)"
 	}
 	
 	func swipe() -> EntryRules {

@@ -10,11 +10,13 @@ import UIKit
 
 class PassViewController: UIViewController {
 	
+	@IBOutlet weak var badgeView: UIView!
 	@IBOutlet weak var entrantNameLabel: UILabel!
 	@IBOutlet weak var passDescriptionLabel: UILabel!
 	@IBOutlet weak var rideAccessLabel: UILabel!
 	@IBOutlet weak var foodDiscountLabel: UILabel!
 	@IBOutlet weak var merchDiscountLabel: UILabel!
+	@IBOutlet weak var punctureView: UIView!
 	
 	var entrant: EntrantType?
 
@@ -36,8 +38,13 @@ class PassViewController: UIViewController {
 				
 				if discounts.count > 0 {
 					
-					foodDiscountLabel.text = "\(Int(discounts[0].discountValue))% Food Discount"
-					merchDiscountLabel.text = "\(Int(discounts[1].discountValue))% Merch Discount"
+					foodDiscountLabel.text = "• \(Int(discounts[0].discountValue))% Food Discount"
+					
+					//Kind of silly but we would't have more than 2
+					if discounts.count > 1 {
+						
+						merchDiscountLabel.text = "• \(Int(discounts[1].discountValue))% Merch Discount"
+					}
 				}
 			} else {
 				
@@ -46,8 +53,17 @@ class PassViewController: UIViewController {
 			}
 		}
 		
+		badgeView.layer.cornerRadius = 5
+		badgeView.layer.shadowColor = UIColor(red: 193/255.0, green: 186/255.0, blue: 196/255.0, alpha: 1.0).CGColor
+		badgeView.layer.shadowOpacity = 1
+		badgeView.layer.shadowOffset = CGSize(width: 0, height: 2)
+		badgeView.layer.shadowRadius = 0
 		
-		
+		punctureView.layer.cornerRadius = 5
+		punctureView.layer.shadowColor = UIColor(red: 193/255.0, green: 186/255.0, blue: 196/255.0, alpha: 1.0).CGColor
+		punctureView.layer.shadowOpacity = 1
+		punctureView.layer.shadowOffset = CGSize(width: 0, height: -2)
+		punctureView.layer.shadowRadius = 0
 		
 		
 		

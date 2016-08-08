@@ -189,11 +189,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		firstNameTextField.text = "Qwertyuiopasdfghjklz"
 		lastNameTextField.text = "Zlkjhgfdsapoiuytrewq"
 		
-		//OMFG. Really?
-		
 		let date = Aux.todayBirthday(year: 1993)!
 		
-		dobTextField.text = "\(Aux.dayAsStringFrom(date)).\(Aux.monthAsStringFrom(date)).\(Aux.yearAsStringFrom(date))"
+		//European locale
+		dobTextField.text = "\(Aux.dayAsStringFrom(date))/\(Aux.monthAsStringFrom(date))/\(Aux.yearAsStringFrom(date))"
 		
 		ssnTextField.text = "555-55-5555"
 		companyTextField.text = "Fedex"

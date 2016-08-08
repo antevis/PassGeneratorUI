@@ -302,27 +302,6 @@
                                     <constraint firstItem="DNo-wO-4Vq" firstAttribute="leading" secondItem="hod-xO-A5f" secondAttribute="leading" constant="50" id="vDs-vP-339"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bYH-e0-bJV">
-                                <rect key="frame" x="45" y="713" width="85" height="30"/>
-                                <state key="normal" title="Area Access"/>
-                                <connections>
-                                    <action selector="areaAccess:" destination="vq0-bh-PEa" eventType="touchUpInside" id="3nk-4N-M1g"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c1l-qE-hHR">
-                                <rect key="frame" x="233" y="713" width="84" height="30"/>
-                                <state key="normal" title="Ride Access"/>
-                                <connections>
-                                    <action selector="rideAccess:" destination="vq0-bh-PEa" eventType="touchUpInside" id="STk-Pn-Hv5"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VzT-Gd-Tim">
-                                <rect key="frame" x="415" y="713" width="114" height="30"/>
-                                <state key="normal" title="Discount Access"/>
-                                <connections>
-                                    <action selector="discountAccess:" destination="vq0-bh-PEa" eventType="touchUpInside" id="PmH-yJ-Sef"/>
-                                </connections>
-                            </button>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k55-Tx-0yg">
                                 <rect key="frame" x="45" y="769" width="682" height="110"/>
                                 <subviews>
@@ -342,6 +321,30 @@
                                     <action selector="createNewPass:" destination="vq0-bh-PEa" eventType="touchUpInside" id="ZwK-xr-TMQ"/>
                                 </connections>
                             </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="sAe-4P-B9R">
+                                <rect key="frame" x="45" y="685" width="682" height="76"/>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bYH-e0-bJV">
+                                <rect key="frame" x="121" y="621" width="85" height="30"/>
+                                <state key="normal" title="Area Access"/>
+                                <connections>
+                                    <action selector="areaAccess:" destination="vq0-bh-PEa" eventType="touchUpInside" id="3nk-4N-M1g"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c1l-qE-hHR">
+                                <rect key="frame" x="311" y="621" width="84" height="30"/>
+                                <state key="normal" title="Ride Access"/>
+                                <connections>
+                                    <action selector="rideAccess:" destination="vq0-bh-PEa" eventType="touchUpInside" id="STk-Pn-Hv5"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VzT-Gd-Tim">
+                                <rect key="frame" x="491" y="621" width="114" height="30"/>
+                                <state key="normal" title="Discount Access"/>
+                                <connections>
+                                    <action selector="discountAccess:" destination="vq0-bh-PEa" eventType="touchUpInside" id="PmH-yJ-Sef"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.82352941176470584" green="0.80000000000000004" blue="0.84705882352941175" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -357,6 +360,7 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
                     <connections>
                         <outlet property="badgeView" destination="hod-xO-A5f" id="ldY-xu-Mki"/>
+                        <outlet property="childAccessStack" destination="sAe-4P-B9R" id="qpc-Rc-Ety"/>
                         <outlet property="entrantNameLabel" destination="I1a-1n-3yQ" id="EVI-x5-yiy"/>
                         <outlet property="foodDiscountLabel" destination="RHy-kK-3FK" id="GUF-XH-jtK"/>
                         <outlet property="merchDiscountLabel" destination="UUI-hQ-ygz" id="ZGr-cF-Mcy"/>

@@ -18,6 +18,8 @@ class PassViewController: UIViewController {
 	@IBOutlet weak var merchDiscountLabel: UILabel!
 	@IBOutlet weak var punctureView: UIView!
 	
+	@IBOutlet weak var childAccessStack: UIStackView!
+	
 	var entrant: EntrantType?
 
     override func viewDidLoad() {

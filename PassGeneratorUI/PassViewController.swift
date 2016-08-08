@@ -88,6 +88,14 @@ class PassViewController: UIViewController {
 //			presentViewController(entrantController, animated: true, completion: nil)
 //		}
 	}
+	@IBAction func areaAccess(sender: AnyObject) {
+	}
+	
+	@IBAction func rideAccess(sender: AnyObject) {
+	}
+	
+	@IBAction func discountAccess(sender: AnyObject) {
+	}
     /*
     // MARK: - Navigation
 

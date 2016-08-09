@@ -31,13 +31,13 @@ let AreaAccessByVendor: [VendorCompany: [Area]] = [
 
 //MARK: enums
 
-enum Area {
+enum Area: String {
 	
-	case amusement
-	case kitchen
-	case rideControl
-	case maintenance
-	case office
+	case amusement = "Amusement Area"
+	case kitchen = "Kitchen Area"
+	case rideControl = "Ride Control Area"
+	case maintenance = "Maintenance Area"
+	case office = "Office Area"
 	
 	func testAccess(entryRules: EntryRules, makeSound: Bool = true) -> (accessGranted: Bool, message: String) {
 		
@@ -69,8 +69,31 @@ extension Area {
 	
 	static func fullAccess() -> [Area] {
 		
+		return allAreas()
+	}
+	
+	static func allAreas() -> [Area] {
+		
 		//Missing enum iteration in almost every project so far.:(
-		return [Area.amusement, Area.kitchen, Area.maintenance, Area.maintenance, Area.office, Area.rideControl]
+		return [Area.amusement, Area.kitchen, Area.rideControl, Area.maintenance, Area.office]
+	}
+	
+	//For button generation purposes (to avoid any tagging misplacement due to some hypothetical collection re-ordering)
+	static func areaDictionary() -> [Int: Area] {
+		
+		return [0: Area.amusement, 1: Area.kitchen, 2: Area.rideControl, 3: Area.maintenance, 4: Area.office]
+	}
+	
+	static func allAreaNames() -> [String] {
+		
+		var areaNames: [String] = []
+		
+		for area in allAreas() {
+			
+			areaNames.append(area.rawValue)
+		}
+		
+		return areaNames
 	}
 }
 

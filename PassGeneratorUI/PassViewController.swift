@@ -20,6 +20,11 @@ class PassViewController: UIViewController {
 	
 	@IBOutlet weak var childAccessStack: UIStackView!
 	
+	@IBOutlet weak var testResultsLabel: UILabel!
+	@IBOutlet weak var testPaneView: UIView!
+	
+	
+	
 	var entrant: EntrantType?
 
     override func viewDidLoad() {
@@ -91,12 +96,38 @@ class PassViewController: UIViewController {
 //		}
 	}
 	@IBAction func areaAccess(sender: AnyObject) {
+		
+		Aux.removeButtonsFrom(childAccessStack)
+		
+		for (tag, area) in Area.areaDictionary(){
+			
+			let button = Aux.composeButton(buttonText: area.rawValue, tag: tag, bgColor: UIColor.lightGrayColor(), titleColor: UIColor.grayColor())
+			button.addTarget(self, action: .testAreaAccessTapped, forControlEvents: .TouchUpInside)
+			
+			childAccessStack.addArrangedSubview(button)
+		}
+		
+		
 	}
 	
 	@IBAction func rideAccess(sender: AnyObject) {
 	}
 	
 	@IBAction func discountAccess(sender: AnyObject) {
+	}
+	
+	func testAreaAccess(sender: UIButton!) {
+		
+		let rules = entrant?.swipe()
+		
+		let area = Area.areaDictionary()[sender.tag]
+		
+		if let rules = rules, let areaAccessTestResult = area?.testAccess(rules, makeSound: true) {
+		
+			testPaneView.backgroundColor = areaAccessTestResult.accessGranted ? UIColor.greenColor() : UIColor.redColor()
+			
+			testResultsLabel.text = "\(areaAccessTestResult.message) to \(area?.rawValue ?? "Area")"
+		}
 	}
     /*
     // MARK: - Navigation
@@ -109,3 +140,12 @@ class PassViewController: UIViewController {
     */
 
 }
+
+private extension Selector {
+	
+	//static let parentTapped = #selector(ViewController.fillChildStack(_:))
+	
+	static let testAreaAccessTapped = #selector(PassViewController.testAreaAccess(_:))
+	
+}
+

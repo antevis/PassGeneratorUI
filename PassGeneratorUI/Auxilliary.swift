@@ -203,5 +203,18 @@ class Auxilliary {
 		return test.evaluateWithObject(value)
 	}
 	
+	class func composeButton(buttonText text: String, tag: Int, bgColor: UIColor, titleColor: UIColor) -> UIButton {
+		
+		let button = UIButton()
+		button.backgroundColor = bgColor
+		button.setTitle(text, forState: .Normal)
+		button.setTitleColor(titleColor, forState: .Normal)
+		button.titleLabel?.textAlignment = .Center
+		button.titleLabel?.lineBreakMode = .ByWordWrapping
+		
+		button.tag = tag
+		
+		return button
+	}
 	
 }

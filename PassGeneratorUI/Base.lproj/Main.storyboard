@@ -302,18 +302,6 @@
                                     <constraint firstItem="DNo-wO-4Vq" firstAttribute="leading" secondItem="hod-xO-A5f" secondAttribute="leading" constant="50" id="vDs-vP-339"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k55-Tx-0yg">
-                                <rect key="frame" x="45" y="769" width="682" height="110"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Test Results" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YPw-n1-Vda">
-                                        <rect key="frame" x="295" y="44" width="93" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </view>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="63T-LI-aWt">
                                 <rect key="frame" x="328" y="936" width="117" height="30"/>
                                 <state key="normal" title="Create New Pass"/>
@@ -321,10 +309,13 @@
                                     <action selector="createNewPass:" destination="vq0-bh-PEa" eventType="touchUpInside" id="ZwK-xr-TMQ"/>
                                 </connections>
                             </button>
-                            <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="sAe-4P-B9R">
-                                <rect key="frame" x="45" y="685" width="682" height="76"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="sAe-4P-B9R">
+                                <rect key="frame" x="43" y="677" width="682" height="76"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="76" id="sZl-PB-bsQ"/>
+                                </constraints>
                             </stackView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bYH-e0-bJV">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bYH-e0-bJV">
                                 <rect key="frame" x="121" y="621" width="85" height="30"/>
                                 <state key="normal" title="Area Access"/>
                                 <connections>
@@ -345,15 +336,46 @@
                                     <action selector="discountAccess:" destination="vq0-bh-PEa" eventType="touchUpInside" id="PmH-yJ-Sef"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k55-Tx-0yg">
+                                <rect key="frame" x="43" y="779" width="682" height="110"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Test Results" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YPw-n1-Vda">
+                                        <rect key="frame" x="295" y="44" width="93" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="YPw-n1-Vda" firstAttribute="centerX" secondItem="k55-Tx-0yg" secondAttribute="centerX" id="7i4-cd-DiK"/>
+                                    <constraint firstAttribute="height" constant="110" id="Fqo-Rz-pyg"/>
+                                    <constraint firstItem="YPw-n1-Vda" firstAttribute="centerY" secondItem="k55-Tx-0yg" secondAttribute="centerY" id="kdv-wS-feA"/>
+                                    <constraint firstItem="YPw-n1-Vda" firstAttribute="centerX" secondItem="k55-Tx-0yg" secondAttribute="centerX" id="yEy-fM-yfb"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="yEy-fM-yfb"/>
+                                    </mask>
+                                </variation>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.82352941176470584" green="0.80000000000000004" blue="0.84705882352941175" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="k55-Tx-0yg" firstAttribute="centerY" secondItem="tdj-WG-30u" secondAttribute="centerY" constant="322" id="4NF-0Y-sip"/>
+                            <constraint firstItem="bYH-e0-bJV" firstAttribute="leading" secondItem="tdj-WG-30u" secondAttribute="leadingMargin" constant="101" id="AKF-B2-plC"/>
                             <constraint firstItem="hod-xO-A5f" firstAttribute="leading" secondItem="tdj-WG-30u" secondAttribute="leadingMargin" constant="29" id="DCW-fK-0Xw"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="k55-Tx-0yg" secondAttribute="trailing" constant="23" id="Hk5-6O-kLu"/>
                             <constraint firstItem="hod-xO-A5f" firstAttribute="top" secondItem="Qjh-gC-RWO" secondAttribute="bottom" constant="37" id="IIX-gk-hLk"/>
                             <constraint firstItem="hod-xO-A5f" firstAttribute="centerX" secondItem="tdj-WG-30u" secondAttribute="centerX" id="QQH-BB-MVK"/>
+                            <constraint firstItem="bYH-e0-bJV" firstAttribute="top" secondItem="hod-xO-A5f" secondAttribute="bottom" constant="153" id="QTm-ba-Ldf"/>
+                            <constraint firstItem="sAe-4P-B9R" firstAttribute="leading" secondItem="tdj-WG-30u" secondAttribute="leadingMargin" constant="23" id="YT9-xi-BBV"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="sAe-4P-B9R" secondAttribute="trailing" constant="23" id="aKl-UW-yAz"/>
                             <constraint firstAttribute="trailing" secondItem="Qjh-gC-RWO" secondAttribute="trailing" id="fpQ-pd-Z6f"/>
+                            <constraint firstItem="k55-Tx-0yg" firstAttribute="leading" secondItem="tdj-WG-30u" secondAttribute="leadingMargin" constant="23" id="g4x-Uh-VGi"/>
                             <constraint firstItem="Qjh-gC-RWO" firstAttribute="top" secondItem="tdj-WG-30u" secondAttribute="top" id="jqa-9M-viZ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="hod-xO-A5f" secondAttribute="trailing" constant="29" id="uud-9z-JpD"/>
+                            <constraint firstItem="sAe-4P-B9R" firstAttribute="top" secondItem="bYH-e0-bJV" secondAttribute="bottom" constant="26" id="wm4-pW-ZsX"/>
                             <constraint firstItem="Qjh-gC-RWO" firstAttribute="leading" secondItem="tdj-WG-30u" secondAttribute="leading" id="wsH-aB-h3v"/>
                         </constraints>
                     </view>
@@ -367,6 +389,8 @@
                         <outlet property="passDescriptionLabel" destination="8Ef-0L-poR" id="xmN-1n-C3o"/>
                         <outlet property="punctureView" destination="lg9-0p-gd4" id="xMv-FC-xWC"/>
                         <outlet property="rideAccessLabel" destination="13a-fV-MbJ" id="coO-wN-daO"/>
+                        <outlet property="testPaneView" destination="k55-Tx-0yg" id="Het-rj-Ti6"/>
+                        <outlet property="testResultsLabel" destination="YPw-n1-Vda" id="Ijc-FG-v3I"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sSi-nS-3ld" userLabel="First Responder" sceneMemberID="firstResponder"/>

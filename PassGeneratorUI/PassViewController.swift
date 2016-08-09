@@ -26,13 +26,23 @@ class PassViewController: UIViewController {
 	
 	
 	var entrant: EntrantType?
+	
+	var rules: EntryRules?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
 		
+		func noDiscounts() {
+			
+			foodDiscountLabel.text = " "
+			merchDiscountLabel.text = " "
+		}
+		
 		if let entrant = entrant {
+			
+			self.rules = entrant.swipe()
 		
 			entrantNameLabel.text = "\(entrant.fullName?.firstName ?? "") \(entrant.fullName?.lastName ?? "")"
 			passDescriptionLabel.text = entrant.description
@@ -52,11 +62,17 @@ class PassViewController: UIViewController {
 						
 						merchDiscountLabel.text = "• \(Int(discounts[1].discountValue))% Merch Discount"
 					}
+					
+				} else {
+					
+					//This workaround for ContractEmployee: it inherits DiscountClaimant protocol from Employee, but it's actually not.
+					//Really no wish to refactor there anymore..
+					noDiscounts()
 				}
+				
 			} else {
 				
-				foodDiscountLabel.text = " "
-				merchDiscountLabel.text = " "
+				noDiscounts()
 			}
 		}
 		
@@ -106,28 +122,108 @@ class PassViewController: UIViewController {
 			
 			childAccessStack.addArrangedSubview(button)
 		}
-		
-		
 	}
 	
 	@IBAction func rideAccess(sender: AnyObject) {
+		
+		Aux.removeButtonsFrom(childAccessStack)
+		
+		if let rideAccessSpecs = rules?.rideAccess.rideAccessSpecification {
+			
+			for (specKey, specValue) in rideAccessSpecs {
+				
+				let button = Aux.composeButton(buttonText: specValue.positiveTitle, tag: specKey, bgColor: UIColor.lightGrayColor(), titleColor: UIColor.grayColor())
+				button.addTarget(self, action: Selector.testRideAccessTapped, forControlEvents: .TouchUpInside)
+				
+				childAccessStack.addArrangedSubview(button)
+			}
+		}
 	}
 	
 	@IBAction func discountAccess(sender: AnyObject) {
+		
+		Aux.removeButtonsFrom(childAccessStack)
+		
+		if let discountRules = rules?.discountAccess {
+			
+			for index in 0 ..< discountRules.count {
+				
+				let button = Aux.composeButton(buttonText: discountRules[index].subject.rawValue, tag: index, bgColor: UIColor.lightGrayColor(), titleColor: UIColor.grayColor())
+				button.addTarget(self, action: Selector.testDiscountsTapped, forControlEvents: .TouchUpInside)
+				
+				childAccessStack.addArrangedSubview(button)
+			}
+		} else {
+			
+			//TODO: add no discounts message
+		}
+		
 	}
 	
 	func testAreaAccess(sender: UIButton!) {
-		
-		let rules = entrant?.swipe()
 		
 		let area = Area.areaDictionary()[sender.tag]
 		
 		if let rules = rules, let areaAccessTestResult = area?.testAccess(rules, makeSound: true) {
 		
 			testPaneView.backgroundColor = areaAccessTestResult.accessGranted ? UIColor.greenColor() : UIColor.redColor()
-			
 			testResultsLabel.text = "\(areaAccessTestResult.message) to \(area?.rawValue ?? "Area")"
+			
 		}
+	}
+	
+	func testRideAccess(sender: UIButton!) {
+		
+		if let rideAccessSpecs = rules?.rideAccess.rideAccessSpecification, let spec = rideAccessSpecs[sender.tag] {
+			
+			updateTestResultsPaneWith(spec.ruleValue, text: (positive: spec.positiveTitle, negative: spec.negativeTitle), makeSound: true)
+			
+		} else {
+			updateTestResultsPaneWith(false, text: (positive: "Undefined Access", negative: "Undefined Access"), makeSound: true)
+		}
+	}
+	
+	func testDiscountAccess(sender: UIButton!) {
+		
+		if let discounts = rules?.discountAccess  {
+			
+			if sender.tag < discounts.count {
+				
+				let discountSpec = discounts[sender.tag]
+
+				updateTestResultsPaneWith(true, text: (positive: discountSpec.description(), negative: discountSpec.description()), makeSound: true)
+				
+			} else { //Which is not supposed to ever happen but still
+				
+				updateTestResultsPaneWith(false, text: (positive: "Undefined Discount", negative: "Undefined Discount"), makeSound: true)
+			}
+		} else {
+			
+			updateTestResultsPaneWith(false, text: (positive: "No discounts found", negative: "No discounts found"), makeSound: true)
+		}
+	}
+	
+	func updateTestResultsPaneWith(result: Bool, text: (positive: String, negative: String), makeSound: Bool = false) {
+		
+		let sfx: SoundFX? = makeSound ? SoundFX() : nil
+		
+		var msg: String
+		
+		if result {
+			
+			sfx?.loadGrantedSound()
+			msg = text.positive
+		} else {
+			
+			sfx?.loadDeniedSound()
+			msg = text.negative
+		}
+		
+		testPaneView.backgroundColor = result ? UIColor.greenColor() : UIColor.redColor()
+		testResultsLabel.text = msg
+		
+		sfx?.playSound()
+		
 	}
     /*
     // MARK: - Navigation
@@ -143,9 +239,9 @@ class PassViewController: UIViewController {
 
 private extension Selector {
 	
-	//static let parentTapped = #selector(ViewController.fillChildStack(_:))
-	
 	static let testAreaAccessTapped = #selector(PassViewController.testAreaAccess(_:))
+	static let testRideAccessTapped = #selector(PassViewController.testRideAccess(_:))
+	static let testDiscountsTapped = #selector(PassViewController.testDiscountAccess(_:))
 	
 }
 

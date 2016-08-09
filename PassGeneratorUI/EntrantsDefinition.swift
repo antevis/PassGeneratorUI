@@ -99,8 +99,8 @@ extension Area {
 
 enum DiscountSubject: String {
 	
-	case food
-	case merchandise
+	case food = "Food Discount"
+	case merchandise = "Merchandize discount"
 }
 
 enum ManagementTier: String {
@@ -189,15 +189,26 @@ struct RideAccess {
 	let skipLines: Bool
 	let seeEntrantAccessRules: Bool //Uncomment in Part 2
 	
+	
+	
 	func description() -> String {
 		
-		let rideAccess = "\(testAccess(self.unlimitedAccess, trueText: "Has Unlimited access to rides", falseText: "Has no access to rides").message)\r"
+		var result: String = ""
 		
-		let canSkip = "\(testAccess(self.skipLines, trueText: "Can Skip Lines", falseText: "Cannot Skip Lines").message)\r"
+		for (_, specValue) in self.rideAccessSpecification {
+			
+			result += "\(testAccess(self.unlimitedAccess, trueText: specValue.positiveTitle, falseText: specValue.negativeTitle).message)\r"
+		}
 		
-		let seeRules = "\(testAccess(self.seeEntrantAccessRules, trueText: "Can See Entrant Access Rules", falseText: "Can't See Entrant Access Rules").message)\r"
+		return result
 		
-		return "\(rideAccess)\(canSkip)\(seeRules)"
+//		let rideAccess = "\(testAccess(self.unlimitedAccess, trueText: rideAccessSpecification[0]?.positiveTitle ?? "Access Granted", falseText: rideAccessSpecification[0]?.negativeTitle ?? "Access Denied").message)\r"
+//		
+//		let canSkip = "\(testAccess(self.skipLines, trueText: "Can Skip Lines", falseText: "Cannot Skip Lines").message)\r"
+//		
+//		let seeRules = "\(testAccess(self.seeEntrantAccessRules, trueText: "Can See Entrant Access Rules", falseText: "Can't See Entrant Access Rules").message)\r"
+//		
+//		return "\(rideAccess)\(canSkip)\(seeRules)"
 	}
 	
 	func testAccess(parameter: Bool, trueText: String = "Yes", falseText: String = "No", makeSound: Bool = true) -> (param: Bool, message: String) {
@@ -228,9 +239,10 @@ struct RideAccess {
 		
 		var desc: String = ""
 		
-		desc = addDescriptionTo(desc, basedOn: self.unlimitedAccess, additionText: "Unlimited Rides", marker: "•")
-		desc = addDescriptionTo(desc, basedOn: self.skipLines, additionText: "Can Skip Lines", marker: "•")
-		desc = addDescriptionTo(desc, basedOn: self.seeEntrantAccessRules, additionText: "Can See Entrant Rules", marker: "•")
+		for (_, specValue) in rideAccessSpecification {
+			
+			desc = addDescriptionTo(desc, basedOn: specValue.ruleValue, additionText: specValue.positiveTitle, marker: "•")
+		}
 		
 		return desc
 	}
@@ -257,6 +269,19 @@ struct RideAccess {
 	}
 }
 
+extension RideAccess {
+	
+	var rideAccessSpecification: [Int: (ruleValue: Bool, positiveTitle: String, negativeTitle: String)] {
+		
+		get {
+			
+			return [
+				0: (self.unlimitedAccess, "Unlimited Rides", "No Rides"),
+				1: (self.skipLines, "Can Skip Lines", "Can't Skip Lines"),
+				2: (self.seeEntrantAccessRules, "Can See Entrant Rules", "Can't See Entrant Rules")]
+		}
+	}
+}
 
 
 struct DiscountParams {

@@ -362,7 +362,6 @@
                         </subviews>
                         <color key="backgroundColor" red="0.82352941176470584" green="0.80000000000000004" blue="0.84705882352941175" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="k55-Tx-0yg" firstAttribute="centerY" secondItem="tdj-WG-30u" secondAttribute="centerY" constant="322" id="4NF-0Y-sip"/>
                             <constraint firstItem="bYH-e0-bJV" firstAttribute="leading" secondItem="tdj-WG-30u" secondAttribute="leadingMargin" constant="101" id="AKF-B2-plC"/>
                             <constraint firstItem="hod-xO-A5f" firstAttribute="leading" secondItem="tdj-WG-30u" secondAttribute="leadingMargin" constant="29" id="DCW-fK-0Xw"/>
                             <constraint firstAttribute="trailingMargin" secondItem="k55-Tx-0yg" secondAttribute="trailing" constant="23" id="Hk5-6O-kLu"/>
@@ -370,6 +369,7 @@
                             <constraint firstItem="hod-xO-A5f" firstAttribute="centerX" secondItem="tdj-WG-30u" secondAttribute="centerX" id="QQH-BB-MVK"/>
                             <constraint firstItem="bYH-e0-bJV" firstAttribute="top" secondItem="hod-xO-A5f" secondAttribute="bottom" constant="153" id="QTm-ba-Ldf"/>
                             <constraint firstItem="sAe-4P-B9R" firstAttribute="leading" secondItem="tdj-WG-30u" secondAttribute="leadingMargin" constant="23" id="YT9-xi-BBV"/>
+                            <constraint firstItem="k55-Tx-0yg" firstAttribute="top" secondItem="sAe-4P-B9R" secondAttribute="bottom" constant="26" id="Z6I-pu-qGE"/>
                             <constraint firstAttribute="trailingMargin" secondItem="sAe-4P-B9R" secondAttribute="trailing" constant="23" id="aKl-UW-yAz"/>
                             <constraint firstAttribute="trailing" secondItem="Qjh-gC-RWO" secondAttribute="trailing" id="fpQ-pd-Z6f"/>
                             <constraint firstItem="k55-Tx-0yg" firstAttribute="leading" secondItem="tdj-WG-30u" secondAttribute="leadingMargin" constant="23" id="g4x-Uh-VGi"/>

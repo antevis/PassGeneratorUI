@@ -17,13 +17,15 @@ class PassViewController: UIViewController {
 	@IBOutlet weak var foodDiscountLabel: UILabel!
 	@IBOutlet weak var merchDiscountLabel: UILabel!
 	@IBOutlet weak var punctureView: UIView!
+	@IBOutlet weak var parentStack: UIStackView!
 	
 	@IBOutlet weak var childAccessStack: UIStackView!
 	
 	@IBOutlet weak var testResultsLabel: UILabel!
 	@IBOutlet weak var testPaneView: UIView!
 	
-	
+	let btnBackgroundColor = UIColor(red: 235/255.0, green: 231/255.0, blue: 238/255.0, alpha: 1.0)
+	let btnTitleColor = UIColor(red: 72/255.0, green: 132/255.0, blue: 135/255.0, alpha: 1.0)
 	
 	var entrant: EntrantType?
 	
@@ -42,7 +44,7 @@ class PassViewController: UIViewController {
 		
 		if let entrant = entrant {
 			
-			self.rules = entrant.swipe()
+			//self.rules = entrant.swipe()
 		
 			entrantNameLabel.text = "\(entrant.fullName?.firstName ?? "") \(entrant.fullName?.lastName ?? "")"
 			passDescriptionLabel.text = entrant.description
@@ -89,7 +91,13 @@ class PassViewController: UIViewController {
 		punctureView.layer.shadowRadius = 0
 		
 		
-		
+		for subView in parentStack.subviews {
+			
+			if let button = subView as? UIButton {
+				
+				button.layer.cornerRadius = 8
+			}
+		}
     }
 
     override func didReceiveMemoryWarning() {
@@ -117,8 +125,11 @@ class PassViewController: UIViewController {
 		
 		for (tag, area) in Area.areaDictionary(){
 			
-			let button = Aux.composeButton(buttonText: area.rawValue, tag: tag, bgColor: UIColor.lightGrayColor(), titleColor: UIColor.grayColor())
+			let button = Aux.composeButton(buttonText: area.rawValue, tag: tag, bgColor: btnBackgroundColor, titleColor: btnTitleColor, cornterRadius: 8)
+			
 			button.addTarget(self, action: .testAreaAccessTapped, forControlEvents: .TouchUpInside)
+			
+			button.titleLabel?.font = UIFont.boldSystemFontOfSize(16)
 			
 			childAccessStack.addArrangedSubview(button)
 		}
@@ -128,11 +139,13 @@ class PassViewController: UIViewController {
 		
 		Aux.removeButtonsFrom(childAccessStack)
 		
+		rules = entrant?.swipe()
+		
 		if let rideAccessSpecs = rules?.rideAccess.rideAccessSpecification {
 			
 			for (specKey, specValue) in rideAccessSpecs {
 				
-				let button = Aux.composeButton(buttonText: specValue.positiveTitle, tag: specKey, bgColor: UIColor.lightGrayColor(), titleColor: UIColor.grayColor())
+				let button = Aux.composeButton(buttonText: specValue.positiveTitle, tag: specKey, bgColor: btnBackgroundColor, titleColor: btnTitleColor, cornterRadius: 8)
 				button.addTarget(self, action: Selector.testRideAccessTapped, forControlEvents: .TouchUpInside)
 				
 				childAccessStack.addArrangedSubview(button)
@@ -144,11 +157,13 @@ class PassViewController: UIViewController {
 		
 		Aux.removeButtonsFrom(childAccessStack)
 		
+		rules = entrant?.swipe()
+		
 		if let discountRules = rules?.discountAccess {
 			
 			for index in 0 ..< discountRules.count {
 				
-				let button = Aux.composeButton(buttonText: discountRules[index].subject.rawValue, tag: index, bgColor: UIColor.lightGrayColor(), titleColor: UIColor.grayColor())
+				let button = Aux.composeButton(buttonText: discountRules[index].subject.rawValue, tag: index, bgColor: btnBackgroundColor, titleColor: btnTitleColor, cornterRadius: 8)
 				button.addTarget(self, action: Selector.testDiscountsTapped, forControlEvents: .TouchUpInside)
 				
 				childAccessStack.addArrangedSubview(button)
@@ -162,6 +177,8 @@ class PassViewController: UIViewController {
 	
 	func testAreaAccess(sender: UIButton!) {
 		
+		rules = entrant?.swipe()
+		
 		let area = Area.areaDictionary()[sender.tag]
 		
 		if let rules = rules, let areaAccessTestResult = area?.testAccess(rules, makeSound: true) {
@@ -174,6 +191,8 @@ class PassViewController: UIViewController {
 	
 	func testRideAccess(sender: UIButton!) {
 		
+		rules = entrant?.swipe()
+		
 		if let rideAccessSpecs = rules?.rideAccess.rideAccessSpecification, let spec = rideAccessSpecs[sender.tag] {
 			
 			updateTestResultsPaneWith(spec.ruleValue, text: (positive: spec.positiveTitle, negative: spec.negativeTitle), makeSound: true)
@@ -184,6 +203,8 @@ class PassViewController: UIViewController {
 	}
 	
 	func testDiscountAccess(sender: UIButton!) {
+		
+		rules = entrant?.swipe()
 		
 		if let discounts = rules?.discountAccess  {
 			

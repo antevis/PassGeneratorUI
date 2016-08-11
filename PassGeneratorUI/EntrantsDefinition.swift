@@ -271,14 +271,14 @@ struct RideAccess {
 
 extension RideAccess {
 	
-	var rideAccessSpecification: [Int: (ruleValue: Bool, positiveTitle: String, negativeTitle: String)] {
+	var rideAccessSpecification: [Int: (ruleValue: Bool, positiveTitle: String, negativeTitle: String, description: String)] {
 		
 		get {
 			
 			return [
-				0: (self.unlimitedAccess, "Unlimited Rides", "No Rides"),
-				1: (self.skipLines, "Can Skip Lines", "Can't Skip Lines"),
-				2: (self.seeEntrantAccessRules, "Can See Entrant Rules", "Can't See Entrant Rules")]
+				0: (self.unlimitedAccess, "Unlimited Rides", "No Rides Access", "Rides"),
+				1: (self.skipLines, "Can Skip Lines", "Can't Skip Lines", "Priority Access"),
+				2: (self.seeEntrantAccessRules, "Can See Entrant Rules", "Can't See Entrant Rules", "Entrant Rules Information")]
 		}
 	}
 }

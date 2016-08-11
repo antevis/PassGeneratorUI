@@ -52,7 +52,12 @@ class PassViewController: UIViewController {
 		
 		if let entrant = entrant {
 			
-			//self.rules = entrant.swipe()
+			self.rules = entrant.swipe()
+			
+			if let rules = rules {
+			
+				testResultsLabel.text = rules.greeting
+			}
 		
 			entrantNameLabel.text = "\(entrant.fullName?.firstName ?? "") \(entrant.fullName?.lastName ?? "")"
 			passDescriptionLabel.text = entrant.description
@@ -161,13 +166,13 @@ class PassViewController: UIViewController {
 		
 		resetSubViews()
 		
-		rules = entrant?.swipe()
+		//rules = entrant?.swipe()
 		
 		if let rideAccessSpecs = rules?.rideAccess.rideAccessSpecification {
 			
 			for (specKey, specValue) in rideAccessSpecs {
 				
-				let button = Aux.composeButton(buttonText: specValue.positiveTitle, tag: specKey, bgColor: btnBackgroundColor, titleColor: btnTitleColor, cornerRadius: self.cornerRadius)
+				let button = Aux.composeButton(buttonText: specValue.description, tag: specKey, bgColor: btnBackgroundColor, titleColor: btnTitleColor, cornerRadius: self.cornerRadius)
 				button.addTarget(self, action: Selector.testRideAccessTapped, forControlEvents: .TouchUpInside)
 				
 				childAccessStack.addArrangedSubview(button)
@@ -179,7 +184,7 @@ class PassViewController: UIViewController {
 		
 		resetSubViews()
 		
-		rules = entrant?.swipe()
+		//rules = entrant?.swipe()
 		
 		if let discountRules = rules?.discountAccess where discountRules.count > 0{
 			
@@ -204,7 +209,7 @@ class PassViewController: UIViewController {
 	
 	func testAreaAccess(sender: UIButton!) {
 		
-		rules = entrant?.swipe()
+		//rules = entrant?.swipe()
 		
 		let area = Area.areaDictionary()[sender.tag]
 		
@@ -220,7 +225,7 @@ class PassViewController: UIViewController {
 	
 	func testRideAccess(sender: UIButton!) {
 		
-		rules = entrant?.swipe()
+		//rules = entrant?.swipe()
 		
 		if let rideAccessSpecs = rules?.rideAccess.rideAccessSpecification, let spec = rideAccessSpecs[sender.tag] {
 			
@@ -233,7 +238,7 @@ class PassViewController: UIViewController {
 	
 	func testDiscountAccess(sender: UIButton!) {
 		
-		rules = entrant?.swipe()
+		//rules = entrant?.swipe()
 		
 		if let discounts = rules?.discountAccess  {
 			

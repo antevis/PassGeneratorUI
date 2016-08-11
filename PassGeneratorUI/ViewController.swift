@@ -53,6 +53,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	@IBOutlet weak var stateTextField: UITextField!
 	@IBOutlet weak var zipTextField: UITextField!
 	@IBOutlet weak var pickerContainer: UIView!
+	
 	@IBOutlet weak var generatePassButton: UIButton!
 	@IBOutlet weak var populateDataButton: UIButton!
 	
@@ -60,7 +61,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	let childColor = UIColor(red: 48/255.0, green: 40/255.0, blue: 55/255.0, alpha: 1)
 	let headerDimmedColor = UIColor(red: 198/255.0, green: 178/255.0, blue: 218/255.0, alpha: 1)
 	let childDimmedColor = UIColor(red: 111/255.0, green: 100/255.0, blue: 121/255.0, alpha: 1)
-	let labelBorderColor = UIColor(red: 147/255.0, green: 142/255.0, blue: 151/255.0, alpha: 1).CGColor
+	
+	let bgColor = UIColor(red: 210/255.0, green: 204/255.0, blue: 216/255.0, alpha: 1)
+	
+	let enabledLabelBorderColor = UIColor(red: 133/255.0, green: 128/255.0, blue: 136/255.0, alpha: 1)
+	let disabledLabelBorderColor = UIColor(red: 177/255.0, green: 172/255.0, blue: 182/255.0, alpha: 1)
 	
 	
 	var headerButtons: [UIButton] = []
@@ -84,9 +89,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		doHeavyLifting()
 	}
 	
-	override func viewWillAppear(animated: Bool) {
-		streetTextField.text = ""
-	}
+//	override func viewWillAppear(animated: Bool) {
+//		
+//	}
 	
 	//MARK: UITextFieldDelegate conformance + text field validation
 	func textFieldShouldEndEditing(textField: UITextField) -> Bool {
@@ -196,13 +201,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	
 	@IBAction func populateDataTapped(sender: AnyObject) {
 		
-		firstNameTextField.text = "Qwertyuiopasdfghjklz"
-		lastNameTextField.text = "Zlkjhgfdsapoiuytrewq"
+		firstNameTextField.text = "Henry"
+		lastNameTextField.text = "Churchill"
 		
 		let date = Aux.todayBirthday(year: 1993)!
+		let dateFormatter = NSDateFormatter()
+		dateFormatter.dateStyle = .ShortStyle
 		
-		//European locale
-		dobTextField.text = "\(Aux.dayAsStringFrom(date))/\(Aux.monthAsStringFrom(date))/\(Aux.yearAsStringFrom(date))"
+		dobTextField.text = dateFormatter.stringFromDate(date)
 		
 		ssnTextField.text = "555-55-5555"
 		companyTextField.text = "Fedex"
@@ -210,6 +216,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		cityTextField.text = "San Francisco"
 		stateTextField.text = "CA"
 		zipTextField.text = "99999"
+		
 	}
 	func fillParentStack() {
 		
@@ -251,13 +258,20 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 			tag += 1
 		}
 		
-		disableAllFields()
+		disableAllFields(view)
 		
-		currentChildTag = 0
-		if let button = subCatStackView.subviews[currentChildTag] as? UIButton {
+		
+		//toggle subCat .TouchUpInside in case of single menu option (relevant for Vendor => Vendor Representative
+		if entrantStructureItem.subCat.count == 1 {
 			
-			button.sendActionsForControlEvents(.TouchUpInside)
+			currentChildTag = 0
+			if let button = subCatStackView.subviews[currentChildTag] as? UIButton {
+	
+				button.sendActionsForControlEvents(.TouchUpInside)
+			}
 		}
+		
+
 	}
 	
 	func onSubCatSelected(sender: UIButton!) {
@@ -551,7 +565,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 			dobTextField.placeholder = "   \(dateFormatPlaceHolder.uppercaseString)"
 		}
 		
-		pickerContainer.layer.borderColor = UIColor(red: 147/255.0, green: 142/255.0, blue: 151/255.0, alpha: 1).CGColor
+		pickerContainer.layer.borderColor = disabledLabelBorderColor.CGColor
 		pickerContainer.layer.cornerRadius = 4
 		pickerContainer.layer.borderWidth = 2
 		
@@ -568,7 +582,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 			
 			if let textField = subview as? UITextField {
 				
-				textField.layer.borderColor = labelBorderColor
+				if textField.enabled {
+					
+					textField.layer.borderColor = enabledLabelBorderColor.CGColor
+					
+				} else {
+					
+					textField.layer.borderColor = disabledLabelBorderColor.CGColor
+				}
 				textField.layer.borderWidth = 2
 				textField.layer.cornerRadius = 4
 			}
@@ -658,20 +679,31 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		displayAlert(title: "Error", message: message)
 	}
 	
-	func disableAllFields() {
+	func disableAllFields(view: UIView) {
 		
 		for subView in view.subviews {
 			
 			if let textField = subView as? UITextField {
 				
 				textField.enabled = false
+				textField.backgroundColor = bgColor
+				textField.layer.borderColor = disabledLabelBorderColor.CGColor
 			}
+			
+			if let picker = subView as? UIPickerView {
+				
+				picker.hidden = true
+				picker.userInteractionEnabled = false
+				pickerContainer.layer.borderColor = disabledLabelBorderColor.CGColor
+			}
+			
+			disableAllFields(subView)
 		}
 	}
 	
 	func enableRelevantFields() {
 		
-		disableAllFields() //just in case
+		disableAllFields(view) //just in case
 		
 		let entrantSubCatTuple = entrantStructure[currentParentTag].subCat[currentChildTag]
 		
@@ -682,6 +714,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 			for field in fieldsToEnable {
 				
 				field.enabled = true
+				field.backgroundColor = UIColor.whiteColor()
+				field.layer.borderColor = enabledLabelBorderColor.CGColor
+			}
+			
+			if currentEntrant == EntrantSubCategory.vendorRepresentative {
+				
+				projectPicker.userInteractionEnabled = true
+				projectPicker.hidden = false
+				
+				pickerContainer.layer.borderColor = enabledLabelBorderColor.CGColor
 			}
 		}
 	}

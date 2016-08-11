@@ -722,7 +722,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 				field.layer.borderColor = enabledLabelBorderColor.CGColor
 			}
 			
-			if currentEntrant == EntrantSubCategory.vendorRepresentative {
+			if currentEntrant == EntrantSubCategory.contractEmployee {
 				
 				projectPicker.userInteractionEnabled = true
 				projectPicker.hidden = false

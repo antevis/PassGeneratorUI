@@ -562,7 +562,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		//Make birth date placeholder locale-dependant
 		if let dateFormatPlaceHolder = NSDateFormatter.dateFormatFromTemplate("MMddyyyy", options: 0, locale: NSLocale.currentLocale()) {
 			
-			dobTextField.placeholder = "   \(dateFormatPlaceHolder.uppercaseString)"
+			dobTextField.placeholder = "\(dateFormatPlaceHolder.uppercaseString)"
 		}
 		
 		pickerContainer.layer.borderColor = disabledLabelBorderColor.CGColor
@@ -592,6 +592,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 				}
 				textField.layer.borderWidth = 2
 				textField.layer.cornerRadius = 4
+				
+				let spacerView = UIView(frame:CGRect(x:0, y:0, width:10, height:10))
+				textField.leftViewMode = UITextFieldViewMode.Always
+				textField.leftView = spacerView
 			}
 			
 			setTextFieldAttibutes(subview)

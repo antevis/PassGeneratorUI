@@ -52,6 +52,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	@IBOutlet weak var cityTextField: UITextField!
 	@IBOutlet weak var stateTextField: UITextField!
 	@IBOutlet weak var zipTextField: UITextField!
+	@IBOutlet weak var pickerContainer: UIView!
+	@IBOutlet weak var generatePassButton: UIButton!
+	@IBOutlet weak var populateDataButton: UIButton!
+	
+	let headerColor = UIColor(red: 118/255.0, green: 85/255.0, blue: 152/255.0, alpha: 1)
+	let childColor = UIColor(red: 48/255.0, green: 40/255.0, blue: 55/255.0, alpha: 1)
+	let headerDimmedColor = UIColor(red: 198/255.0, green: 178/255.0, blue: 218/255.0, alpha: 1)
+	let childDimmedColor = UIColor(red: 111/255.0, green: 100/255.0, blue: 121/255.0, alpha: 1)
+	let labelBorderColor = UIColor(red: 147/255.0, green: 142/255.0, blue: 151/255.0, alpha: 1).CGColor
+	
 	
 	var headerButtons: [UIButton] = []
 	var childButtons: [UIButton] = []
@@ -207,7 +217,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		
 		for item in entrantStructure {
 			
-			let button = composeButton(buttonText: item.category.rawValue, tag: tag, bgColor: UIColor.blueColor(), titleColor: UIColor.grayColor(), action: .parentTapped)
+			let button = composeButton(buttonText: item.category.rawValue, tag: tag, bgColor: headerColor, titleColor: headerDimmedColor, action: .parentTapped, fontSize: 18, bold: true)
 			
 			headerStackView.addArrangedSubview(button)
 			
@@ -223,7 +233,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		
 		for button in headerButtons {
 			
-			button.setTitleColor(UIColor.grayColor(), forState: .Normal)
+			button.setTitleColor(headerDimmedColor, forState: .Normal)
 		}
 		
 		sender.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -236,7 +246,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		
 		for item in entrantStructureItem.subCat {
 			
-			addButtonTo(stack: subCatStackView, text: item.0.rawValue, tag: tag, bgColor: UIColor.magentaColor(), titleColor: UIColor.grayColor(), action: Selector.childTapped)
+			addButtonTo(stack: subCatStackView, text: item.0.rawValue, tag: tag, bgColor: childColor, titleColor: childDimmedColor, action: Selector.childTapped)
 			
 			tag += 1
 		}
@@ -258,7 +268,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 			
 			if let button = subView as? UIButton {
 				
-				button.setTitleColor(UIColor.grayColor(), forState: .Normal)
+				button.setTitleColor(childDimmedColor, forState: .Normal)
 			}
 		}
 		
@@ -538,11 +548,36 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		//Make birth date placeholder locale-dependant
 		if let dateFormatPlaceHolder = NSDateFormatter.dateFormatFromTemplate("MMddyyyy", options: 0, locale: NSLocale.currentLocale()) {
 			
-			dobTextField.placeholder = dateFormatPlaceHolder.uppercaseString
+			dobTextField.placeholder = "   \(dateFormatPlaceHolder.uppercaseString)"
+		}
+		
+		pickerContainer.layer.borderColor = UIColor(red: 147/255.0, green: 142/255.0, blue: 151/255.0, alpha: 1).CGColor
+		pickerContainer.layer.cornerRadius = 4
+		pickerContainer.layer.borderWidth = 2
+		
+		setTextFieldAttibutes(view)
+		
+		generatePassButton.layer.cornerRadius = 5
+		populateDataButton.layer.cornerRadius = 5
+		
+	}
+	
+	func setTextFieldAttibutes(view: UIView) {
+		
+		for subview in view.subviews {
+			
+			if let textField = subview as? UITextField {
+				
+				textField.layer.borderColor = labelBorderColor
+				textField.layer.borderWidth = 2
+				textField.layer.cornerRadius = 4
+			}
+			
+			setTextFieldAttibutes(subview)
 		}
 	}
 	
-	func composeButton(buttonText text: String, tag: Int, bgColor: UIColor, titleColor: UIColor, action: Selector) -> UIButton {
+	func composeButton(buttonText text: String, tag: Int, bgColor: UIColor, titleColor: UIColor, action: Selector, fontSize: CGFloat? = 15, bold: Bool? = false) -> UIButton {
 		
 		let button = UIButton()
 		button.backgroundColor = bgColor
@@ -552,6 +587,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		button.titleLabel?.lineBreakMode = .ByWordWrapping
 		button.addTarget(self, action: action, forControlEvents: .TouchUpInside)
 		
+		if let fontSize = fontSize, let font = button.titleLabel?.font {
+			
+			button.titleLabel?.font = UIFont(name: font.fontName, size: fontSize)
+		}
+		
+		if let _ = bold, let font = button.titleLabel?.font {
+			
+			button.titleLabel?.font = font.bold()
+		}
+		
 		button.tag = tag
 		
 		return button
@@ -559,9 +604,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	
 	
 	
-	func addButtonTo(stack stackView: UIStackView, text: String, tag: Int, bgColor: UIColor, titleColor: UIColor, action: Selector) {
+	func addButtonTo(stack stackView: UIStackView, text: String, tag: Int, bgColor: UIColor, titleColor: UIColor, action: Selector, fontSize: CGFloat = 15, bold: Bool = false) {
 		
-		let button = composeButton(buttonText: text, tag: tag, bgColor: bgColor, titleColor: titleColor, action: action)
+		let button = composeButton(buttonText: text, tag: tag, bgColor: bgColor, titleColor: titleColor, action: action, fontSize: fontSize, bold: bold)
 		
 		stackView.addArrangedSubview(button)
 	}
@@ -967,6 +1012,20 @@ private extension Selector {
 	static let parentTapped = #selector(ViewController.fillChildStack(_:))
 	
 	static let childTapped = #selector(ViewController.onSubCatSelected(_:))
+	
+}
+
+private extension UIFont {
+	
+	func withTraits(traits:UIFontDescriptorSymbolicTraits...) -> UIFont {
+		let descriptor = self.fontDescriptor()
+			.fontDescriptorWithSymbolicTraits(UIFontDescriptorSymbolicTraits(traits))
+		return UIFont(descriptor: descriptor, size: 0)
+	}
+	
+	func bold() -> UIFont {
+		return withTraits(.TraitBold)
+	}
 	
 }
 

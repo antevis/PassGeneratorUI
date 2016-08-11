@@ -224,12 +224,12 @@ class Auxilliary {
 		return button
 	}
 	
-	class func createInfoLabelWith(message text: String, labelColor: UIColor) -> UILabel {
+	class func createInfoLabelWith(message text: String, labelColor: UIColor, fontSize: CGFloat = 16) -> UILabel {
 		
 		let infoLabel = UILabel()
 		
 		infoLabel.text = text
-		infoLabel.font = UIFont.boldSystemFontOfSize(16)
+		infoLabel.font = UIFont.boldSystemFontOfSize(fontSize)
 		infoLabel.textColor = labelColor
 		infoLabel.textAlignment = .Center
 		

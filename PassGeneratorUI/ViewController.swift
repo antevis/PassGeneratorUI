@@ -228,7 +228,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		
 		sender.setTitleColor(UIColor.whiteColor(), forState: .Normal)
 		
-		Aux.removeButtonsFrom(subCatStackView)
+		Aux.removeAllSubviewsFrom(subCatStackView)
 		
 		let entrantStructureItem: EntrantCat = entrantStructure[sender.tag]
 		

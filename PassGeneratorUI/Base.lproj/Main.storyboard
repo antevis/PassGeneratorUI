@@ -315,17 +315,24 @@
                                     <constraint firstAttribute="height" constant="60" id="sZl-PB-bsQ"/>
                                 </constraints>
                             </stackView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uig-un-XpU">
+                                <rect key="frame" x="43" y="872" width="682" height="43"/>
+                                <color key="backgroundColor" red="0.85882352941176465" green="0.83921568627450982" blue="0.87450980392156863" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="43" id="555-L7-w9t"/>
+                                </constraints>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k55-Tx-0yg">
                                 <rect key="frame" x="43" y="804" width="682" height="110"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Test Results" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YPw-n1-Vda">
                                         <rect key="frame" x="295" y="44" width="93" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <color key="textColor" red="0.38823529411764707" green="0.36862745098039218" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" red="0.28235294117647058" green="0.51764705882352946" blue="0.49019607843137253" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.74901960784313726" green="0.72549019607843135" blue="0.77254901960784317" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="YPw-n1-Vda" firstAttribute="centerX" secondItem="k55-Tx-0yg" secondAttribute="centerX" id="7i4-cd-DiK"/>
                                     <constraint firstAttribute="height" constant="110" id="Fqo-Rz-pyg"/>
@@ -379,11 +386,18 @@
                                     <constraint firstAttribute="height" constant="60" id="5pp-pm-Gtw"/>
                                 </constraints>
                             </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tHr-bh-hRU">
+                                <rect key="frame" x="294" y="542" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.70588235294117652" green="0.67843137254901964" blue="0.72156862745098038" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.82352941176470584" green="0.80000000000000004" blue="0.84705882352941175" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="sAe-4P-B9R" firstAttribute="top" secondItem="XwJ-4O-ifo" secondAttribute="bottom" constant="8" id="00n-Vj-E1k"/>
                             <constraint firstItem="XwJ-4O-ifo" firstAttribute="top" secondItem="hod-xO-A5f" secondAttribute="bottom" constant="182" id="0Mf-FX-CUu"/>
+                            <constraint firstItem="uig-un-XpU" firstAttribute="leading" secondItem="tdj-WG-30u" secondAttribute="leadingMargin" constant="23" id="3bm-9x-x9z"/>
                             <constraint firstItem="XwJ-4O-ifo" firstAttribute="leading" secondItem="tdj-WG-30u" secondAttribute="leadingMargin" constant="23" id="4X2-dZ-Ocd"/>
                             <constraint firstItem="hod-xO-A5f" firstAttribute="leading" secondItem="tdj-WG-30u" secondAttribute="leadingMargin" constant="29" id="DCW-fK-0Xw"/>
                             <constraint firstAttribute="trailingMargin" secondItem="k55-Tx-0yg" secondAttribute="trailing" constant="23" id="Hk5-6O-kLu"/>
@@ -392,12 +406,15 @@
                             <constraint firstItem="sAe-4P-B9R" firstAttribute="leading" secondItem="tdj-WG-30u" secondAttribute="leadingMargin" constant="23" id="YT9-xi-BBV"/>
                             <constraint firstItem="k55-Tx-0yg" firstAttribute="top" secondItem="sAe-4P-B9R" secondAttribute="bottom" constant="26" id="Z6I-pu-qGE"/>
                             <constraint firstAttribute="trailingMargin" secondItem="sAe-4P-B9R" secondAttribute="trailing" constant="23" id="aKl-UW-yAz"/>
+                            <constraint firstItem="uig-un-XpU" firstAttribute="top" secondItem="k55-Tx-0yg" secondAttribute="bottom" constant="-42" id="djq-qc-K0d"/>
                             <constraint firstAttribute="trailing" secondItem="Qjh-gC-RWO" secondAttribute="trailing" id="fpQ-pd-Z6f"/>
                             <constraint firstItem="k55-Tx-0yg" firstAttribute="leading" secondItem="tdj-WG-30u" secondAttribute="leadingMargin" constant="23" id="g4x-Uh-VGi"/>
                             <constraint firstAttribute="trailingMargin" secondItem="XwJ-4O-ifo" secondAttribute="trailing" constant="23" id="gI8-qi-YFx"/>
                             <constraint firstItem="Qjh-gC-RWO" firstAttribute="top" secondItem="tdj-WG-30u" secondAttribute="top" id="jqa-9M-viZ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="uig-un-XpU" secondAttribute="trailing" constant="23" id="q2P-ZT-oMD"/>
                             <constraint firstAttribute="trailingMargin" secondItem="hod-xO-A5f" secondAttribute="trailing" constant="29" id="uud-9z-JpD"/>
                             <constraint firstItem="Qjh-gC-RWO" firstAttribute="leading" secondItem="tdj-WG-30u" secondAttribute="leading" id="wsH-aB-h3v"/>
+                            <constraint firstItem="uig-un-XpU" firstAttribute="width" secondItem="k55-Tx-0yg" secondAttribute="width" id="zqq-fk-f15"/>
                         </constraints>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
@@ -413,6 +430,7 @@
                         <outlet property="rideAccessLabel" destination="13a-fV-MbJ" id="coO-wN-daO"/>
                         <outlet property="testPaneView" destination="k55-Tx-0yg" id="Het-rj-Ti6"/>
                         <outlet property="testResultsLabel" destination="YPw-n1-Vda" id="Ijc-FG-v3I"/>
+                        <outlet property="whiteShadowView" destination="uig-un-XpU" id="3y2-y7-kLI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sSi-nS-3ld" userLabel="First Responder" sceneMemberID="firstResponder"/>

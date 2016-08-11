@@ -23,9 +23,14 @@ class PassViewController: UIViewController {
 	
 	@IBOutlet weak var testResultsLabel: UILabel!
 	@IBOutlet weak var testPaneView: UIView!
+	@IBOutlet weak var whiteShadowView: UIView!
 	
 	let btnBackgroundColor = UIColor(red: 235/255.0, green: 231/255.0, blue: 238/255.0, alpha: 1.0)
 	let btnTitleColor = UIColor(red: 72/255.0, green: 132/255.0, blue: 135/255.0, alpha: 1.0)
+	let deniedColor = UIColor(red: 242/255.0, green: 0, blue: 61/255.0, alpha: 1)
+	let grantedColor = UIColor(red: 0, green: 182/255.0, blue: 58/255.0, alpha: 1)
+	let testPaneDefaultColor = UIColor(red: 191/255.0, green: 185/255.0, blue: 197/255.0, alpha: 1)
+	let testPaneLabelDefaultColor = UIColor(red: 99/255.0, green: 94/255.0, blue: 102/255.0, alpha: 1)
 	
 	var entrant: EntrantType?
 	
@@ -90,12 +95,20 @@ class PassViewController: UIViewController {
 		punctureView.layer.shadowOffset = CGSize(width: 0, height: -2)
 		punctureView.layer.shadowRadius = 0
 		
+		testPaneView.layer.cornerRadius = 5
+		testPaneView.layer.shadowColor = UIColor(red: 180/255.0, green: 173/255.0, blue: 184/255.0, alpha: 1.0).CGColor
+		testPaneView.layer.shadowOpacity = 1
+		testPaneView.layer.shadowOffset = CGSize(width: 0, height: -1)
+		testPaneView.layer.shadowRadius = 0
+		
+		whiteShadowView.layer.cornerRadius = testPaneView.layer.cornerRadius
+		
 		
 		for subView in parentStack.subviews {
 			
 			if let button = subView as? UIButton {
 				
-				button.layer.cornerRadius = 8
+				button.layer.cornerRadius = 5
 			}
 		}
     }
@@ -108,7 +121,15 @@ class PassViewController: UIViewController {
 	override func preferredStatusBarStyle() -> UIStatusBarStyle {
 		return UIStatusBarStyle.LightContent
 	}
-    
+	
+	func resetSubViews() {
+		
+		Aux.removeAllSubviewsFrom(childAccessStack)
+		
+		testPaneView.backgroundColor = self.testPaneDefaultColor
+		testResultsLabel.text = "Test Results"
+		testResultsLabel.textColor = testPaneLabelDefaultColor
+	}
 
 	@IBAction func createNewPass(sender: AnyObject) {
 		
@@ -121,7 +142,7 @@ class PassViewController: UIViewController {
 	}
 	@IBAction func areaAccess(sender: AnyObject) {
 		
-		Aux.removeButtonsFrom(childAccessStack)
+		resetSubViews()
 		
 		for (tag, area) in Area.areaDictionary(){
 			
@@ -129,15 +150,13 @@ class PassViewController: UIViewController {
 			
 			button.addTarget(self, action: .testAreaAccessTapped, forControlEvents: .TouchUpInside)
 			
-			button.titleLabel?.font = UIFont.boldSystemFontOfSize(16)
-			
 			childAccessStack.addArrangedSubview(button)
 		}
 	}
 	
 	@IBAction func rideAccess(sender: AnyObject) {
 		
-		Aux.removeButtonsFrom(childAccessStack)
+		resetSubViews()
 		
 		rules = entrant?.swipe()
 		
@@ -155,11 +174,11 @@ class PassViewController: UIViewController {
 	
 	@IBAction func discountAccess(sender: AnyObject) {
 		
-		Aux.removeButtonsFrom(childAccessStack)
+		resetSubViews()
 		
 		rules = entrant?.swipe()
 		
-		if let discountRules = rules?.discountAccess {
+		if let discountRules = rules?.discountAccess where discountRules.count > 0{
 			
 			for index in 0 ..< discountRules.count {
 				
@@ -168,12 +187,17 @@ class PassViewController: UIViewController {
 				
 				childAccessStack.addArrangedSubview(button)
 			}
+			
 		} else {
 			
-			//TODO: add no discounts message
+			childAccessStack.addArrangedSubview(Aux.createInfoLabelWith(message: "No discount data found.", labelColor: btnTitleColor))
+			
+			Aux.playNegativeSound()
 		}
 		
 	}
+	
+	
 	
 	func testAreaAccess(sender: UIButton!) {
 		
@@ -183,8 +207,10 @@ class PassViewController: UIViewController {
 		
 		if let rules = rules, let areaAccessTestResult = area?.testAccess(rules, makeSound: true) {
 		
-			testPaneView.backgroundColor = areaAccessTestResult.accessGranted ? UIColor.greenColor() : UIColor.redColor()
+			testPaneView.backgroundColor = areaAccessTestResult.accessGranted ? self.grantedColor : self.deniedColor
 			testResultsLabel.text = "\(areaAccessTestResult.message) to \(area?.rawValue ?? "Area")"
+			
+			testResultsLabel.textColor = UIColor.whiteColor()
 			
 		}
 	}
@@ -240,8 +266,9 @@ class PassViewController: UIViewController {
 			msg = text.negative
 		}
 		
-		testPaneView.backgroundColor = result ? UIColor.greenColor() : UIColor.redColor()
+		testPaneView.backgroundColor = result ? self.grantedColor : self.deniedColor
 		testResultsLabel.text = msg
+		testResultsLabel.textColor = UIColor.whiteColor()
 		
 		sfx?.playSound()
 		

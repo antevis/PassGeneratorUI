@@ -125,14 +125,16 @@ class Auxilliary {
 		}
 	}
 	
-	class func  removeButtonsFrom(superView: UIView) {
+	class func  removeAllSubviewsFrom(superView: UIView) {
 		
 		for subView in superView.subviews {
 			
-			if subView is UIButton {
-				
-				subView.removeFromSuperview()
-			}
+//			if subView is UIButton {
+//				
+//				subView.removeFromSuperview()
+//			}
+			
+			subView.removeFromSuperview()
 		}
 	}
 	
@@ -220,6 +222,30 @@ class Auxilliary {
 		button.tag = tag
 		
 		return button
+	}
+	
+	class func createInfoLabelWith(message text: String, labelColor: UIColor) -> UILabel {
+		
+		let infoLabel = UILabel()
+		
+		infoLabel.text = text
+		infoLabel.font = UIFont.boldSystemFontOfSize(16)
+		infoLabel.textColor = labelColor
+		infoLabel.textAlignment = .Center
+		
+		return infoLabel
+	}
+	
+	class func playNegativeSound() -> Void {
+		let sfx = SoundFX()
+		sfx.loadDeniedSound()
+		sfx.playSound()
+	}
+	
+	class func playPositiveSound() -> Void {
+		let sfx = SoundFX()
+		sfx.loadGrantedSound()
+		sfx.playSound()
 	}
 	
 }

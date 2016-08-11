@@ -44,12 +44,6 @@ class PassViewController: UIViewController {
 
         // Do any additional setup after loading the view.
 		
-		func noDiscounts() {
-			
-			foodDiscountLabel.text = " "
-			merchDiscountLabel.text = " "
-		}
-		
 		if let entrant = entrant {
 			
 			self.rules = entrant.swipe()
@@ -59,36 +53,7 @@ class PassViewController: UIViewController {
 				testResultsLabel.text = rules.greeting
 			}
 		
-			entrantNameLabel.text = "\(entrant.fullName?.firstName ?? "") \(entrant.fullName?.lastName ?? "")"
-			passDescriptionLabel.text = entrant.description
-			
-			rideAccessLabel.text = entrant.accessRules.permissions()
-			
-			if let discountclaimantEntrant = entrant as? DiscountClaimant {
-				
-				let discounts = discountclaimantEntrant.discounts
-				
-				if discounts.count > 0 {
-					
-					foodDiscountLabel.text = "• \(Int(discounts[0].discountValue))% Food Discount"
-					
-					//Kind of silly but we would't have more than 2
-					if discounts.count > 1 {
-						
-						merchDiscountLabel.text = "• \(Int(discounts[1].discountValue))% Merch Discount"
-					}
-					
-				} else {
-					
-					//This workaround for ContractEmployee: it inherits DiscountClaimant protocol from Employee, but it's actually not.
-					//Really no wish to refactor there anymore..
-					noDiscounts()
-				}
-				
-			} else {
-				
-				noDiscounts()
-			}
+			badgeSetupFor(entrant)
 		}
 		
 		shadowSetup()
@@ -105,8 +70,6 @@ class PassViewController: UIViewController {
 	override func preferredStatusBarStyle() -> UIStatusBarStyle {
 		return UIStatusBarStyle.LightContent
 	}
-	
-	
 	
 	//MARK: Event Handlers
 
@@ -282,6 +245,46 @@ class PassViewController: UIViewController {
 		
 		sfx?.playSound()
 		
+	}
+	
+	func noDiscounts() {
+		
+		foodDiscountLabel.text = " "
+		merchDiscountLabel.text = " "
+	}
+	
+	func badgeSetupFor(entrant: EntrantType) {
+		
+		entrantNameLabel.text = "\(entrant.fullName?.firstName ?? "") \(entrant.fullName?.lastName ?? "")"
+		passDescriptionLabel.text = entrant.description
+		
+		rideAccessLabel.text = entrant.accessRules.permissions()
+		
+		if let discountclaimantEntrant = entrant as? DiscountClaimant {
+			
+			let discounts = discountclaimantEntrant.discounts
+			
+			if discounts.count > 0 {
+				
+				foodDiscountLabel.text = "• \(Int(discounts[0].discountValue))% Food Discount"
+				
+				//Kind of silly but we would't have more than 2
+				if discounts.count > 1 {
+					
+					merchDiscountLabel.text = "• \(Int(discounts[1].discountValue))% Merch Discount"
+				}
+				
+			} else {
+				
+				//This workaround for ContractEmployee: it inherits DiscountClaimant protocol from Employee, but it's actually not.
+				//Really no wish to refactor there anymore..
+				noDiscounts()
+			}
+			
+		} else {
+			
+			noDiscounts()
+		}
 	}
 }
 

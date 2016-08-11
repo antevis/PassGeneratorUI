@@ -43,7 +43,7 @@
                                 <rect key="frame" x="24" y="193" width="720" height="60"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="MM/DD/YYYY" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dZb-jq-ARE">
-                                        <rect key="frame" x="0.0" y="0.0" width="226.5" height="60"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="227" height="60"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="VJy-bC-rjS"/>
@@ -52,15 +52,15 @@
                                         <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="   ###-##-####" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5N0-jP-efX">
-                                        <rect key="frame" x="246" y="0.0" width="227" height="60"/>
+                                        <rect key="frame" x="247" y="0.0" width="227" height="60"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                     </textField>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="quq-CU-yGg">
-                                        <rect key="frame" x="493" y="0.0" width="226.5" height="60"/>
+                                        <rect key="frame" x="494" y="0.0" width="227" height="60"/>
                                         <subviews>
-                                            <pickerView userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OR7-1n-1fh">
+                                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OR7-1n-1fh">
                                                 <rect key="frame" x="0.0" y="0.0" width="226.5" height="60"/>
                                             </pickerView>
                                         </subviews>
@@ -219,19 +219,19 @@
                                 <rect key="frame" x="24" y="735" width="720" height="60"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="387-hW-sfJ">
-                                        <rect key="frame" x="0.0" y="0.0" width="226.5" height="60"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="227" height="60"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9gq-lz-zXy">
-                                        <rect key="frame" x="246" y="0.0" width="227" height="60"/>
+                                        <rect key="frame" x="247" y="0.0" width="227" height="60"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Tzj-yv-VyB">
-                                        <rect key="frame" x="493" y="0.0" width="226.5" height="60"/>
+                                        <rect key="frame" x="494" y="0.0" width="227" height="60"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <textInputTraits key="textInputTraits"/>

@@ -24,6 +24,7 @@ class PassViewController: UIViewController {
 	@IBOutlet weak var testResultsLabel: UILabel!
 	@IBOutlet weak var testPaneView: UIView!
 	@IBOutlet weak var whiteShadowView: UIView!
+	@IBOutlet weak var createNewPassButton: UIButton!
 	
 	let btnBackgroundColor = UIColor(red: 235/255.0, green: 231/255.0, blue: 238/255.0, alpha: 1.0)
 	let btnTitleColor = UIColor(red: 72/255.0, green: 132/255.0, blue: 135/255.0, alpha: 1.0)
@@ -31,6 +32,8 @@ class PassViewController: UIViewController {
 	let grantedColor = UIColor(red: 0, green: 182/255.0, blue: 58/255.0, alpha: 1)
 	let testPaneDefaultColor = UIColor(red: 191/255.0, green: 185/255.0, blue: 197/255.0, alpha: 1)
 	let testPaneLabelDefaultColor = UIColor(red: 99/255.0, green: 94/255.0, blue: 102/255.0, alpha: 1)
+	
+	let cornerRadius: CGFloat = 5
 	
 	var entrant: EntrantType?
 	
@@ -83,32 +86,32 @@ class PassViewController: UIViewController {
 			}
 		}
 		
-		badgeView.layer.cornerRadius = 5
+		badgeView.layer.cornerRadius = self.cornerRadius
 		badgeView.layer.shadowColor = UIColor(red: 193/255.0, green: 186/255.0, blue: 196/255.0, alpha: 1.0).CGColor
 		badgeView.layer.shadowOpacity = 1
 		badgeView.layer.shadowOffset = CGSize(width: 0, height: 2)
 		badgeView.layer.shadowRadius = 0
 		
-		punctureView.layer.cornerRadius = 5
+		punctureView.layer.cornerRadius = self.cornerRadius
 		punctureView.layer.shadowColor = UIColor(red: 193/255.0, green: 186/255.0, blue: 196/255.0, alpha: 1.0).CGColor
 		punctureView.layer.shadowOpacity = 1
 		punctureView.layer.shadowOffset = CGSize(width: 0, height: -2)
 		punctureView.layer.shadowRadius = 0
 		
-		testPaneView.layer.cornerRadius = 5
+		testPaneView.layer.cornerRadius = self.cornerRadius
 		testPaneView.layer.shadowColor = UIColor(red: 180/255.0, green: 173/255.0, blue: 184/255.0, alpha: 1.0).CGColor
 		testPaneView.layer.shadowOpacity = 1
 		testPaneView.layer.shadowOffset = CGSize(width: 0, height: -1)
 		testPaneView.layer.shadowRadius = 0
 		
-		whiteShadowView.layer.cornerRadius = testPaneView.layer.cornerRadius
-		
+		whiteShadowView.layer.cornerRadius = self.cornerRadius
+		createNewPassButton.layer.cornerRadius = self.cornerRadius
 		
 		for subView in parentStack.subviews {
 			
 			if let button = subView as? UIButton {
 				
-				button.layer.cornerRadius = 5
+				button.layer.cornerRadius = self.cornerRadius
 			}
 		}
     }
@@ -146,7 +149,7 @@ class PassViewController: UIViewController {
 		
 		for (tag, area) in Area.areaDictionary(){
 			
-			let button = Aux.composeButton(buttonText: area.rawValue, tag: tag, bgColor: btnBackgroundColor, titleColor: btnTitleColor, cornterRadius: 8)
+			let button = Aux.composeButton(buttonText: area.rawValue, tag: tag, bgColor: btnBackgroundColor, titleColor: btnTitleColor, cornerRadius: self.cornerRadius)
 			
 			button.addTarget(self, action: .testAreaAccessTapped, forControlEvents: .TouchUpInside)
 			
@@ -164,7 +167,7 @@ class PassViewController: UIViewController {
 			
 			for (specKey, specValue) in rideAccessSpecs {
 				
-				let button = Aux.composeButton(buttonText: specValue.positiveTitle, tag: specKey, bgColor: btnBackgroundColor, titleColor: btnTitleColor, cornterRadius: 8)
+				let button = Aux.composeButton(buttonText: specValue.positiveTitle, tag: specKey, bgColor: btnBackgroundColor, titleColor: btnTitleColor, cornerRadius: self.cornerRadius)
 				button.addTarget(self, action: Selector.testRideAccessTapped, forControlEvents: .TouchUpInside)
 				
 				childAccessStack.addArrangedSubview(button)
@@ -182,7 +185,7 @@ class PassViewController: UIViewController {
 			
 			for index in 0 ..< discountRules.count {
 				
-				let button = Aux.composeButton(buttonText: discountRules[index].subject.rawValue, tag: index, bgColor: btnBackgroundColor, titleColor: btnTitleColor, cornterRadius: 8)
+				let button = Aux.composeButton(buttonText: discountRules[index].subject.rawValue, tag: index, bgColor: btnBackgroundColor, titleColor: btnTitleColor, cornerRadius: self.cornerRadius)
 				button.addTarget(self, action: Selector.testDiscountsTapped, forControlEvents: .TouchUpInside)
 				
 				childAccessStack.addArrangedSubview(button)

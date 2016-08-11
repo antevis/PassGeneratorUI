@@ -205,7 +205,7 @@ class Auxilliary {
 		return test.evaluateWithObject(value)
 	}
 	
-	class func composeButton(buttonText text: String, tag: Int, bgColor: UIColor, titleColor: UIColor, cornterRadius radius: CGFloat? = nil) -> UIButton {
+	class func composeButton(buttonText text: String, tag: Int, bgColor: UIColor, titleColor: UIColor, cornerRadius radius: CGFloat? = nil) -> UIButton {
 		
 		let button = UIButton()
 		button.backgroundColor = bgColor

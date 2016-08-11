@@ -593,6 +593,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 				textField.layer.borderWidth = 2
 				textField.layer.cornerRadius = 4
 				
+				//http://stackoverflow.com/questions/7565645/indent-the-text-in-a-uitextfield
 				let spacerView = UIView(frame:CGRect(x:0, y:0, width:10, height:10))
 				textField.leftViewMode = UITextFieldViewMode.Always
 				textField.leftView = spacerView

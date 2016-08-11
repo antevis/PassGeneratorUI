@@ -91,26 +91,7 @@ class PassViewController: UIViewController {
 			}
 		}
 		
-		badgeView.layer.cornerRadius = self.cornerRadius
-		badgeView.layer.shadowColor = UIColor(red: 193/255.0, green: 186/255.0, blue: 196/255.0, alpha: 1.0).CGColor
-		badgeView.layer.shadowOpacity = 1
-		badgeView.layer.shadowOffset = CGSize(width: 0, height: 2)
-		badgeView.layer.shadowRadius = 0
-		
-		punctureView.layer.cornerRadius = self.cornerRadius
-		punctureView.layer.shadowColor = UIColor(red: 193/255.0, green: 186/255.0, blue: 196/255.0, alpha: 1.0).CGColor
-		punctureView.layer.shadowOpacity = 1
-		punctureView.layer.shadowOffset = CGSize(width: 0, height: -2)
-		punctureView.layer.shadowRadius = 0
-		
-		testPaneView.layer.cornerRadius = self.cornerRadius
-		testPaneView.layer.shadowColor = UIColor(red: 180/255.0, green: 173/255.0, blue: 184/255.0, alpha: 1.0).CGColor
-		testPaneView.layer.shadowOpacity = 1
-		testPaneView.layer.shadowOffset = CGSize(width: 0, height: -1)
-		testPaneView.layer.shadowRadius = 0
-		
-		whiteShadowView.layer.cornerRadius = self.cornerRadius
-		createNewPassButton.layer.cornerRadius = self.cornerRadius
+		shadowSetup()
 		
 		for subView in parentStack.subviews {
 			
@@ -121,33 +102,19 @@ class PassViewController: UIViewController {
 		}
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-	
 	override func preferredStatusBarStyle() -> UIStatusBarStyle {
 		return UIStatusBarStyle.LightContent
 	}
 	
-	func resetSubViews() {
-		
-		Aux.removeAllSubviewsFrom(childAccessStack)
-		
-		testPaneView.backgroundColor = self.testPaneDefaultColor
-		testResultsLabel.text = "Test Results"
-		testResultsLabel.textColor = testPaneLabelDefaultColor
-	}
+	
+	
+	//MARK: Event Handlers
 
 	@IBAction func createNewPass(sender: AnyObject) {
 		
 		dismissViewControllerAnimated(true, completion: nil)
-		
-//		if let entrantController = storyboard?.instantiateViewControllerWithIdentifier("entrantDataController") as? ViewController {
-//			
-//			presentViewController(entrantController, animated: true, completion: nil)
-//		}
 	}
+	
 	@IBAction func areaAccess(sender: AnyObject) {
 		
 		resetSubViews()
@@ -258,6 +225,41 @@ class PassViewController: UIViewController {
 		}
 	}
 	
+	//MARK: Auxilliary
+	func shadowSetup() {
+		
+		badgeView.layer.cornerRadius = self.cornerRadius
+		badgeView.layer.shadowColor = UIColor(red: 193/255.0, green: 186/255.0, blue: 196/255.0, alpha: 1.0).CGColor
+		badgeView.layer.shadowOpacity = 1
+		badgeView.layer.shadowOffset = CGSize(width: 0, height: 2)
+		badgeView.layer.shadowRadius = 0
+		
+		punctureView.layer.cornerRadius = self.cornerRadius
+		punctureView.layer.shadowColor = UIColor(red: 193/255.0, green: 186/255.0, blue: 196/255.0, alpha: 1.0).CGColor
+		punctureView.layer.shadowOpacity = 1
+		punctureView.layer.shadowOffset = CGSize(width: 0, height: -2)
+		punctureView.layer.shadowRadius = 0
+		
+		testPaneView.layer.cornerRadius = self.cornerRadius
+		testPaneView.layer.shadowColor = UIColor(red: 180/255.0, green: 173/255.0, blue: 184/255.0, alpha: 1.0).CGColor
+		testPaneView.layer.shadowOpacity = 1
+		testPaneView.layer.shadowOffset = CGSize(width: 0, height: -1)
+		testPaneView.layer.shadowRadius = 0
+		
+		whiteShadowView.layer.cornerRadius = self.cornerRadius
+		createNewPassButton.layer.cornerRadius = self.cornerRadius
+	}
+	
+	func resetSubViews() {
+		
+		Aux.removeAllSubviewsFrom(childAccessStack)
+		
+		testPaneView.backgroundColor = self.testPaneDefaultColor
+		testResultsLabel.text = "Test Results"
+		testResultsLabel.textColor = testPaneLabelDefaultColor
+	}
+	
+	
 	func updateTestResultsPaneWith(result: Bool, text: (positive: String, negative: String), makeSound: Bool = false) {
 		
 		let sfx: SoundFX? = makeSound ? SoundFX() : nil
@@ -281,16 +283,6 @@ class PassViewController: UIViewController {
 		sfx?.playSound()
 		
 	}
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
 
 private extension Selector {

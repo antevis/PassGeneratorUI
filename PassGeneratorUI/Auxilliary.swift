@@ -163,6 +163,14 @@ class Auxilliary {
 		return dateFormatter.dateFromString(string)
 	}
 	
+	class func shortDateStringFromNsDate(date: NSDate) -> String {
+		
+		let dateFormatter = NSDateFormatter()
+		dateFormatter.dateStyle = .ShortStyle
+		
+		return dateFormatter.stringFromDate(date)
+	}
+	
 	
 	class func dateValid(text: String, len: Int? = nil) -> Bool {
 		

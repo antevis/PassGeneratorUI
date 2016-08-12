@@ -74,11 +74,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	var pickerItems: [(code: String, project: Project)] =  []
 	
 	var fieldsByEntrant: [EntrantSubCategory: [UITextField]] = [:]
+	var plugValuesDictionary: [UITextField: (noMatch: String, match: String)] = [:]
 	
 	var currentParentTag: Int = 0
 	var currentChildTag: Int = 0
 	
-	var currentEntrant: EntrantSubCategory?// EntrantType.Type?
+	var currentEntrantSubCat: EntrantSubCategory?// EntrantType.Type?
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -159,7 +160,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		var hourlyMaintenance: HourlyEmployeeMaintenance?
 		var hourlyRide: HourlyEmployeeRideService?
 		
-		if let subCat = currentEntrant {
+		if let subCat = currentEntrantSubCat {
 			
 			switch subCat {
 				
@@ -169,7 +170,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 				case .generalManager, .shiftManager, .seniorManager: entrant = manager()
 				case .hourlyEmployeeFood:
 					
-					//A little ugly, but works fine. And utilizes Generics
+					//A little ugly, but works fine
 					hourlyFood = hourly()
 					entrant = hourlyFood
 				
@@ -199,25 +200,40 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		}
 	}
 	
+	
+	
 	@IBAction func populateDataTapped(sender: AnyObject) {
 		
-		firstNameTextField.text = "Henry"
-		lastNameTextField.text = "Churchill"
-		
-		let date = Aux.todayBirthday(year: 1993)!
-		let dateFormatter = NSDateFormatter()
-		dateFormatter.dateStyle = .ShortStyle
-		
-		dobTextField.text = dateFormatter.stringFromDate(date)
-		
-		ssnTextField.text = "555-55-5555"
-		companyTextField.text = "Fedex"
-		streetTextField.text = "Elm str. 1"
-		cityTextField.text = "San Francisco"
-		stateTextField.text = "CA"
-		zipTextField.text = "99999"
-		
+		if let fieldList = entrantFieldList() {
+			
+			for field in fieldList {
+				
+				if let fieldData = self.plugValuesDictionary[field], let text = field.text {
+
+					if text.isEmpty {
+						
+						field.text = fieldData.noMatch
+						
+					} else if text == fieldData.noMatch {
+						
+						//custom tweak for free child guest
+						if currentEntrantSubCat == EntrantSubCategory.freeChileGuest {
+							
+							field.text = Aux.shortDateStringFromNsDate(Aux.todayBirthday(year: Aux.year() - 4)!)
+							
+							break
+						}
+						
+						field.text = fieldData.match
+						
+						break
+					}
+				}
+			}
+		}
 	}
+	
+	
 	func fillParentStack() {
 		
 		var tag: Int = 0
@@ -287,6 +303,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		}
 		
 		sender.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+		
+		clearAllTextFieldsWithin(view)
 		
 		enableRelevantFields()
 	}
@@ -521,7 +539,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		stateTextField.tag = FVP.fieldTag.state.rawValue
 		zipTextField.tag = FVP.fieldTag.zip.rawValue
 		
-		let nameDobList: [UITextField] = [firstNameTextField, lastNameTextField, dobTextField]
+		let nameDobList: [UITextField] = [dobTextField, firstNameTextField, lastNameTextField]
 		
 		var nameAddressDobList: [UITextField] = nameDobList
 		nameAddressDobList += [streetTextField, cityTextField, stateTextField, zipTextField]
@@ -532,7 +550,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		var vendorList = nameDobList
 		vendorList.append(companyTextField)
 		
-		let fieldsByEntrant: [EntrantSubCategory: [UITextField]] = [
+		self.fieldsByEntrant = [
 			
 			EntrantSubCategory.classicGuest: [],
 			EntrantSubCategory.contractEmployee: nameAddressDobList,
@@ -548,7 +566,33 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 			EntrantSubCategory.vendorRepresentative: vendorList
 		]
 		
-		self.fieldsByEntrant = fieldsByEntrant
+		self.plugValuesDictionary = [
+			
+			firstNameTextField: (noMatch: "ReallyReallyLongLongName", match: "Henry"),
+			lastNameTextField: (noMatch: "ReallyReallyLongLastName", match: "Churchill"),
+			
+			//Yet matching value for date-of-birth fails for kid entrant due to age restrictions
+			dobTextField: (noMatch: "32/32/2032", match: {() -> String in
+				
+				let date = Aux.todayBirthday(year: 1993)!
+				let dateFormatter = NSDateFormatter()
+				dateFormatter.dateStyle = .ShortStyle
+				
+				return dateFormatter.stringFromDate(date)
+				}()),
+			
+			streetTextField: (noMatch: "ReallyReallyLongLongStreetStreetNameName, ReallyReallyLongLongStreetStreetHouseNumberHouseNumber, reallyReally", match: "1 Elm str."),
+			cityTextField: (noMatch: "City Of Long, Really Long Names", match: "Los Angeles"),
+			stateTextField: (noMatch: "CAL", match: "CA"),
+			
+			zipTextField: (noMatch: "CA-99999", match: "99999"),
+		
+			ssnTextField: (noMatch: "5555-5555", match: "555-55-5555"),
+			
+			companyTextField: (noMatch: "Microsoft", match: "Fedex"),
+		]
+		
+		//self.fieldsByEntrant = fieldsByEntrant
 		
 		if headerButtons.count > 0 {
 			
@@ -574,6 +618,33 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		generatePassButton.layer.cornerRadius = 5
 		populateDataButton.layer.cornerRadius = 5
 		
+	}
+	
+	func clearAllTextFieldsWithin(view: UIView) {
+		
+		for subView in view.subviews {
+			
+			if let textField = subView as? UITextField {
+				
+				textField.text = ""
+			}
+			
+			clearAllTextFieldsWithin(subView)
+		}
+	}
+	
+	func entrantFieldList() -> [UITextField]? {
+		
+		currentEntrantSubCat = entrantStructure[currentParentTag].subCat[currentChildTag].subCatName
+		
+		if let currEntrantSubCat = currentEntrantSubCat {
+			
+			return fieldsByEntrant[currEntrantSubCat]
+			
+		} else {
+			
+			return nil
+		}
 	}
 	
 	func setTextFieldAttibutes(view: UIView) {
@@ -712,9 +783,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		
 		let entrantSubCatTuple = entrantStructure[currentParentTag].subCat[currentChildTag]
 		
-		currentEntrant = entrantSubCatTuple.subCatName//.entrantType
+		currentEntrantSubCat = entrantSubCatTuple.subCatName//.entrantType
 		
-		if let currentEntrant = currentEntrant, fieldsToEnable = fieldsByEntrant[currentEntrant] {
+		if let currentEntrant = currentEntrantSubCat, fieldsToEnable = fieldsByEntrant[currentEntrant] {
 			
 			for field in fieldsToEnable {
 				
@@ -810,7 +881,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	func getDobNameAddressData() -> DobNameAddressData? {
 		
 		if
-			let currentEntrant = currentEntrant,
+			let currentEntrant = currentEntrantSubCat,
 			let fields = fieldsByEntrant[currentEntrant] where validationPassedFor(fields),
 			let address = retrieveAddress(),
 			let birthDate = retrieveDateValueFrom(dobTextField, subjectName: "Birth Date") {
@@ -828,7 +899,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	func getDobNameData() -> DobNameData? {
 		
 		if
-			let currentEntrant = currentEntrant,
+			let currentEntrant = currentEntrantSubCat,
 			let fields = fieldsByEntrant[currentEntrant] where validationPassedFor(fields),
 			let birthDate = retrieveDateValueFrom(dobTextField, subjectName: "Birth Date") {
 			
@@ -1031,7 +1102,7 @@ struct FieldValidationParameters {
 	
 	let charCountByTag: [fieldTag: CharCountSpec] = [
 		
-		fieldTag.city: CharCountSpec(expectedCharCount: 15, mandatoryCharCountMatch: false, dataType: .text, description: "City"),
+		fieldTag.city: CharCountSpec(expectedCharCount: 30, mandatoryCharCountMatch: false, dataType: .text, description: "City"),
 		fieldTag.company: CharCountSpec(expectedCharCount: 20, mandatoryCharCountMatch: false, dataType: .text, description: "Company Name"),
 		fieldTag.firstName: CharCountSpec(expectedCharCount: 20, mandatoryCharCountMatch: false, dataType: .text, description: "First Name"),
 		fieldTag.lastName: CharCountSpec(expectedCharCount: 20, mandatoryCharCountMatch: false, dataType: .text, description: "Last Name"),
@@ -1057,9 +1128,7 @@ struct FieldValidationParameters {
 private extension Selector {
 	
 	static let parentTapped = #selector(ViewController.fillChildStack(_:))
-	
 	static let childTapped = #selector(ViewController.onSubCatSelected(_:))
-	
 }
 
 private extension UIFont {

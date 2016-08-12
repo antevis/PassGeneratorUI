@@ -90,9 +90,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		doHeavyLifting()
 	}
 	
-//	override func viewWillAppear(animated: Bool) {
-//		
-//	}
 	
 	//MARK: UITextFieldDelegate conformance + text field validation
 	func textFieldShouldEndEditing(textField: UITextField) -> Bool {
@@ -103,6 +100,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 	
 	func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
 		
+		//Enables deletion
 		if string.characters.count == 0 {
 			
 			return true
@@ -127,8 +125,60 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		
 	}
 	
-	
-	
+	//Function used in textFieldShouldEndEditing(textField: UITextField) for UITextFieldDelegate conformance as non-restrictive but informative,
+	//and later for final validation with the 'restrict' paramenter explicitly set to true
+	func valueValidationPassedFor(textField: UITextField, restrict: Bool = false) -> Bool {
+		
+		var validationFunction: (validatedText: String, len: Int?) -> Bool
+		
+		var len: Int?
+		
+		switch textField.tag {
+			
+		case FVP.fieldTag.dob.rawValue:
+			
+			validationFunction = Aux.dateValid
+			
+		case FVP.fieldTag.ssn.rawValue:
+			
+			validationFunction = Aux.ssnValid
+			
+		case FVP.fieldTag.zip.rawValue:
+			
+			validationFunction = Aux.zipValid
+			
+		case FVP.fieldTag.company.rawValue:
+			
+			validationFunction = Aux.vendorCompanyValid
+			
+		case FVP.fieldTag.city.rawValue, FVP.fieldTag.firstName.rawValue, FVP.fieldTag.lastName.rawValue, FVP.fieldTag.state.rawValue, FVP.fieldTag.street.rawValue:
+			
+			validationFunction = Aux.lengthValid
+			len = FVP().getSpec(textField.tag)?.expectedCharCount
+			
+		default:
+			
+			return true
+		}
+		
+		if let candidate = textField.text where validationFunction(validatedText: candidate, len: len) {
+			
+			textField.backgroundColor = nil //default transparent
+			
+		} else {
+			
+			textField.backgroundColor = UIColor(red: 1, green: 123/255.0, blue: 162/255.0, alpha: 1) //pink
+			
+			if restrict {
+				
+				displayAlertRespectiveTo(textField)
+				
+				return false
+			}
+		}
+		
+		return true
+	}
 	
 	//MARK: picker conformance
 	func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
@@ -210,10 +260,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 				
 				if let fieldData = self.plugValuesDictionary[field], let text = field.text {
 
+					//Inserting bad value
 					if text.isEmpty {
 						
 						field.text = fieldData.noMatch
 						
+					//Replacing it with good value
 					} else if text == fieldData.noMatch {
 						
 						//custom tweak for free child guest
@@ -233,7 +285,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		}
 	}
 	
-	
+	//Filling entrant categories
 	func fillParentStack() {
 		
 		var tag: Int = 0
@@ -250,6 +302,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		}
 	}
 	
+	//Filling entrant subcategories
 	func fillChildStack(sender: UIButton!){
 		
 		self.currentParentTag = sender.tag
@@ -278,6 +331,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		
 		
 		//toggle subCat .TouchUpInside in case of single menu option (relevant for Vendor => Vendor Representative
+		//makes no sense to wait for subcategory selection if there is only one.
 		if entrantStructureItem.subCat.count == 1 {
 			
 			currentChildTag = 0
@@ -286,8 +340,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 				button.sendActionsForControlEvents(.TouchUpInside)
 			}
 		}
-		
-
 	}
 	
 	func onSubCatSelected(sender: UIButton!) {
@@ -817,11 +869,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 			
 			
 		} catch EntrantError.AddressStateMissing(let message) {
+			
 			displayAlert(title: "Error", message: message)
 			
-			
-			
-		}catch EntrantError.AddressStreetMissing(let message){
+		} catch EntrantError.AddressStreetMissing(let message){
 			
 			displayAlert(title: "Error", message: message)
 			
@@ -981,60 +1032,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
 		return true
 	}
 	
-	//Function used in textFieldShouldEndEditing(textField: UITextField) for UITextFieldDelegate conformance as non-restrictive but informative,
-	//and later for final validation with the 'restrict' paramenter explicitly set to true
-	func valueValidationPassedFor(textField: UITextField, restrict: Bool = false) -> Bool {
-		
-		var validationFunction: (validatedText: String, len: Int?) -> Bool
-		
-		var len: Int?
-		
-		switch textField.tag {
-			
-		case FVP.fieldTag.dob.rawValue:
-			
-			validationFunction = Aux.dateValid
-			
-		case FVP.fieldTag.ssn.rawValue:
-			
-			validationFunction = Aux.ssnValid
-			
-		case FVP.fieldTag.zip.rawValue:
-			
-			validationFunction = Aux.zipValid
-			
-		case FVP.fieldTag.company.rawValue:
-			
-			validationFunction = Aux.vendorCompanyValid
-			
-		case FVP.fieldTag.city.rawValue, FVP.fieldTag.firstName.rawValue, FVP.fieldTag.lastName.rawValue, FVP.fieldTag.state.rawValue, FVP.fieldTag.street.rawValue:
-			
-			validationFunction = Aux.lengthValid
-			len = FVP().getSpec(textField.tag)?.expectedCharCount
-			
-		default:
-			
-			return true
-		}
-		
-		if let candidate = textField.text where validationFunction(validatedText: candidate, len: len) {
-			
-			textField.backgroundColor = nil //default transparent
-			
-		} else {
-			
-			textField.backgroundColor = UIColor(red: 1, green: 123/255.0, blue: 162/255.0, alpha: 1) //pink
-			
-			if restrict {
-				
-				displayAlertRespectiveTo(textField)
-				
-				return false
-			}
-		}
-		
-		return true
-	}
+	
 	
 }
 
@@ -1131,6 +1129,7 @@ private extension Selector {
 	static let childTapped = #selector(ViewController.onSubCatSelected(_:))
 }
 
+//http://stackoverflow.com/questions/18862868/setting-bold-font-on-ios-uilabel
 private extension UIFont {
 	
 	func withTraits(traits:UIFontDescriptorSymbolicTraits...) -> UIFont {
